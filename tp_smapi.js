@@ -7,7 +7,7 @@ var TpSmapi = {
 
   state: function(bat)
   {
-    var state = file.read(this.path + 'BAT' + bat + '/state');
+    var state = File.read(this.path + 'BAT' + bat + '/state');
 
     if (f.error == null) {
       if (state == 'idle') {
@@ -24,7 +24,7 @@ var TpSmapi = {
 
   remainingPercent: function(bat)
   {
-    var f = file.read(this.path + 'BAT' + bat + '/remaining_percent');
+    var f = File.read(this.path + 'BAT' + bat + '/remaining_percent');
     if (f.error == null) {
       return f.content;
     } else {
@@ -34,7 +34,7 @@ var TpSmapi = {
 
   remainingRunningTime: function(bat)
   {
-    var f = file.read(this.path + 'BAT' + bat + '/remaining_running_time');
+    var f = File.read(this.path + 'BAT' + bat + '/remaining_running_time');
     if (f.error == null) {
       if (f.content == 'not_discharging') {
         return null;
@@ -70,7 +70,7 @@ var TpSmapi = {
 //   // }
 //
 //   var smapi_state_file = '/sys/devices/platform/smapi/BAT0/state';
-//   var state = file.read(smapi_state_file);
+//   var state = File.read(smapi_state_file);
 //
 //   document.getElementById('battery').innerHTML += '<br>';
 //   if (state.error == null) {
@@ -81,8 +81,8 @@ var TpSmapi = {
 //
 //   /*
 //   document.getElementById('battery').innerHTML += '<br>';
-//   // document.getElementById('battery').innerHTML += file.read(smapi_state_file);
-//   var state = file.open(smapi_state_file);
+//   // document.getElementById('battery').innerHTML += File.read(smapi_state_file);
+//   var state = File.open(smapi_state_file);
 //
 //   // document.getElementById('battery').innerHTML += 'typeof file: ' + typeof file + '<br>';
 //   // for (p in file) {
@@ -101,7 +101,7 @@ var TpSmapi = {
 //   */
 //
 //   /*
-//   var test = file.test;
+//   var test = File.test;
 //   document.getElementById('battery').innerHTML += 'typeof test: ' + typeof test;
 //   document.getElementById('battery').innerHTML += '<br>';
 //   document.getElementById('battery').innerHTML += 'typeof test.content: ' + typeof test.content;
@@ -118,7 +118,7 @@ var TpSmapi = {
 //     document.getElementById('battery').innerHTML += '<br>';
 //   }
 //
-//   var test2 = file.test2;
+//   var test2 = File.test2;
 //   document.getElementById('battery').innerHTML += 'typeof test2: ' + typeof test2;
 //   document.getElementById('battery').innerHTML += '<br>';
 //   document.getElementById('battery').innerHTML += 'typeof test2.content: ' + typeof test2.content;
