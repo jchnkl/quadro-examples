@@ -10,7 +10,7 @@ function nmGetDevicePath(deviceName)
   var path   = '/org/freedesktop/NetworkManager';
   var iface  = 'org.freedesktop.NetworkManager';
   var method = 'GetDeviceByIpIface';
-  return dbus.system.call(nmService, path, iface, method, deviceName);
+  return DBus.system.call(nmService, path, iface, method, deviceName);
 }
 
 function nmGetActiveAccessPointPath(wlanPath)
@@ -19,7 +19,7 @@ function nmGetActiveAccessPointPath(wlanPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.Device.Wireless';
   var arg2   = 'ActiveAccessPoint';
-  return dbus.system.call(nmService, wlanPath, iface, method, arg1, arg2);
+  return DBus.system.call(nmService, wlanPath, iface, method, arg1, arg2);
 }
 
 function nmGetEssid(activeAccessPointPath)
@@ -28,7 +28,7 @@ function nmGetEssid(activeAccessPointPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.AccessPoint';
   var arg2   = 'Ssid';
-  var essid = dbus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2);
+  var essid = DBus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2);
 
   var essidStr = '';
   for (var i = 0; i < essid.length; ++i) {
@@ -44,7 +44,7 @@ function nmGetStrength(activeAccessPointPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.AccessPoint';
   var arg2   = 'Strength';
-  return dbus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2).charCodeAt(0);
+  return DBus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2).charCodeAt(0);
 }
 
 function nmGetActiveConnectionId(deviceName)
@@ -55,11 +55,11 @@ function nmGetActiveConnectionId(deviceName)
   var arg1   = 'org.freedesktop.NetworkManager.Device';
   var arg2   = 'ActiveConnection';
 
-  var acPath = dbus.system.call(nmService, devPath, iface, method, arg1, arg2);
+  var acPath = DBus.system.call(nmService, devPath, iface, method, arg1, arg2);
 
   arg1 = 'org.freedesktop.NetworkManager.Connection.Active';
   arg2 = 'Id';
-  return dbus.system.call(nmService, acPath, iface, method, arg1, arg2);
+  return DBus.system.call(nmService, acPath, iface, method, arg1, arg2);
 }
 
 function nmGetDeviceState(devPath)
@@ -68,5 +68,5 @@ function nmGetDeviceState(devPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.Device';
   var arg2   = 'State';
-  return dbus.system.call(nmService, devPath, iface, method, arg1, arg2);
+  return DBus.system.call(nmService, devPath, iface, method, arg1, arg2);
 }
