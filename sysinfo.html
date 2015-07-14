@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <style type='text/css'>
+
+body {
+  background-color: rgba(255,255,255,1.0);
+}
+
+    </style>
+
+    <script src='sysinfo.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+
+function onLoad()
+{
+  var last = [];
+  for (var i = 0; i < 8; ++i) {
+    last[i] = coreInfo(i);
+  }
+
+  var ncpus = getNumCpus();
+
+  setInterval(function() {
+    document.getElementById('sysinfo').innerHTML = '';
+    for (var i = 0; i < ncpus; ++i) {
+      var now = coreInfo(i);
+      var usage = cpuUsagePercent(last[i], now);
+      last[i] = now;
+
+      document.getElementById('sysinfo').innerHTML += usage.toFixed(1) + '%<br>';
+    }
+
+  }, 1000);
+}
+
+    </script>
+
+  <body onload='onLoad();'>
+    <div id='sysinfo'></div>
+  </body>
+</html>
