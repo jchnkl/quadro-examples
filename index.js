@@ -95,7 +95,7 @@ function updateWlan(obj)
   if (obj['PrimaryConnection'] != null) {
     // dbus['propertiesChanged(QVariantMap)'].disconnect(updateWlan);
 
-    dbus.systemConnectPropertyChanged('org.freedesktop.NetworkManager',
+    DBus.systemConnectPropertyChanged('org.freedesktop.NetworkManager',
                                       nmGetActiveAccessPointPath(nmGetWlan0Path()),
                                       'org.freedesktop.NetworkManager.AccessPoint',
                                       'PropertiesChanged');
@@ -168,13 +168,13 @@ function loadJsDBusBridge()
     html += '<br>';
     // html += showAllProperties(dbus);
     // html += '<br>';
-    html += 'typeof dbus.system: ' + typeof dbus.system;
+    html += 'typeof DBus.system: ' + typeof DBus.system;
     html += '<br>';
-    // html += showAllProperties(dbus.system);
+    // html += showAllProperties(DBus.system);
     // html += '<br>';
-    html += 'typeof dbus.session: ' + typeof dbus.session;
+    html += 'typeof DBus.session: ' + typeof DBus.session;
     html += '<br>';
-    // html += showAllProperties(dbus.session);
+    // html += showAllProperties(DBus.session);
     // html += '<br>';
 
     {
@@ -182,12 +182,12 @@ function loadJsDBusBridge()
       var iface  = 'org.freedesktop.NetworkManager';
       var method = 'GetDeviceByIpIface';
       var arg    = 'wlan0';
-      html += 'CALL: ' + dbus.system.call(nmService, path, iface, method, arg);
+      html += 'CALL: ' + DBus.system.call(nmService, path, iface, method, arg);
       html += '<br>';
     }
 
-    var system  = dbus.system;
-    var session = dbus.session;
+    var system  = DBus.system;
+    var session = DBus.session;
 
     // dbus-send --session --print-reply --type=method_call
     //   --dest=org.gnome.Identity /org/gnome/Identity
@@ -220,9 +220,9 @@ function loadJsDBusBridge()
     // html += 'showAllProperties session: ' + showAllProperties(session);
     // html += '<br>';
 
-    // html += 'typeof dbus.signal: ' + typeof dbus.signal;
+    // html += 'typeof DBus.signal: ' + typeof DBus.signal;
     // html += '<br>';
-    // html += 'dbus.signal: ' + dbus.signal;
+    // html += 'DBus.signal: ' + DBus.signal;
     // html += '<br>';
 
     var sessionNameOwnerSignal = session.connect('org.freedesktop.DBus',
@@ -261,12 +261,12 @@ function loadJsDBusBridge()
     // var activeAccessPointPath = nmGetActiveAccessPointPath(wlan0Path);
     // var strength              = nmGetStrength(activeAccessPointPath);
 
-    // dbus.systemConnectPropertyChanged('org.freedesktop.NetworkManager',
+    // DBus.systemConnectPropertyChanged('org.freedesktop.NetworkManager',
     //                                   nmGetActiveAccessPointPath(nmGetWlan0Path()),
     //                                   'org.freedesktop.NetworkManager.AccessPoint',
     //                                   'PropertiesChanged');
 
-    // dbus.systemConnectPropertyChanged('org.freedesktop.DBus',
+    // DBus.systemConnectPropertyChanged('org.freedesktop.DBus',
     //                                   '/org/freedesktop/DBus',
     //                                   'org.freedesktop.DBus',
     //                                   'NameOwnerChanged');
@@ -287,7 +287,7 @@ function dbusPropertiesGetAll(service, path, arg)
 {
   var iface   = 'org.freedesktop.DBus.Properties';
   var method  = 'GetAll';
-  return dbus.systemCall(service, path, iface, method, arg);
+  return DBus.systemCall(service, path, iface, method, arg);
 }
 
 function nmGetDevices()
@@ -296,7 +296,7 @@ function nmGetDevices()
   var path    = '/org/freedesktop/NetworkManager';
   var iface   = 'org.freedesktop.NetworkManager';
   var method  = 'GetDevices';
-  return dbus.systemCall(service, path, iface, method);
+  return DBus.systemCall(service, path, iface, method);
 }
 
 function nmGetDeviceProperties(devicePath)
@@ -306,7 +306,7 @@ function nmGetDeviceProperties(devicePath)
   var iface   = 'org.freedesktop.DBus.Properties';
   var method  = 'GetAll';
   var arg1    = 'org.freedesktop.NetworkManager.Device';
-  return dbus.systemCall(service, path, iface, method, arg1);
+  return DBus.systemCall(service, path, iface, method, arg1);
 }
 
 function nmGetDeviceInterface(devicePath)
@@ -317,7 +317,7 @@ function nmGetDeviceInterface(devicePath)
   var method  = 'Get';
   var arg1    = 'org.freedesktop.NetworkManager.Device';
   var arg2    = 'Interface';
-  return dbus.systemCall(service, path, iface, method, arg1, arg2);
+  return DBus.systemCall(service, path, iface, method, arg1, arg2);
 }
 
 function nmGetWlan0Path()
@@ -329,7 +329,7 @@ function nmGetWlan0Path()
   var iface  = 'org.freedesktop.NetworkManager';
   var method = 'GetDeviceByIpIface';
   var arg    = 'wlan0';
-  return dbus.system.call(nmService, path, iface, method, arg);
+  return DBus.system.call(nmService, path, iface, method, arg);
 }
 
 function nmGetActiveAccessPointPath(wlanPath)
@@ -342,7 +342,7 @@ function nmGetActiveAccessPointPath(wlanPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.Device.Wireless';
   var arg2   = 'ActiveAccessPoint';
-  return dbus.system.call(nmService, wlanPath, iface, method, arg1, arg2);
+  return DBus.system.call(nmService, wlanPath, iface, method, arg1, arg2);
 }
 
 function nmGetStrength(activeAccessPointPath)
@@ -356,7 +356,7 @@ function nmGetStrength(activeAccessPointPath)
   var method = 'Get';
   var arg1   = 'org.freedesktop.NetworkManager.AccessPoint';
   var arg2   = 'Strength';
-  return dbus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2).charCodeAt(0);
+  return DBus.system.call(nmService, activeAccessPointPath, iface, method, arg1, arg2).charCodeAt(0);
 }
 
 function nmGetActiveAccessPointStrength()
