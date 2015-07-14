@@ -46,14 +46,14 @@ function run(device)
   this.switchState(nmGetDeviceState(devPath));
 
   // get signal object for StateChanged signal for this.device
-  dbus.system.attach(
+  DBus.system.attach(
       'org.freedesktop.NetworkManager',
       devPath,
       'org.freedesktop.NetworkManager.Device',
       'StateChanged');
 
   // connect to StateChanged signals with callback
-  dbus.system.notify.connect(this, onState);
+  DBus.system.notify.connect(this, onState);
 }
 
 function showEssid(essid)
@@ -109,11 +109,11 @@ function onActivated()
 function removeStrengthSignal()
 {
   try {
-    dbus.system.notify.disconnect(this, onStrengthChange);
+    DBus.system.notify.disconnect(this, onStrengthChange);
   } catch (err) {
   }
 
-  dbus.system.detach(
+  DBus.system.detach(
       'org.freedesktop.NetworkManager',
       this.apPath,
       'org.freedesktop.NetworkManager.AccessPoint',
@@ -122,12 +122,12 @@ function removeStrengthSignal()
 
 function installStrengthSignal()
 {
-  dbus.system.attach(
+  DBus.system.attach(
       'org.freedesktop.NetworkManager',
       this.apPath,
       'org.freedesktop.NetworkManager.AccessPoint',
       'PropertiesChanged');
-  dbus.system.notify.connect(this, onStrengthChange);
+  DBus.system.notify.connect(this, onStrengthChange);
 }
 
 function onStrengthChange(msg)
