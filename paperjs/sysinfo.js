@@ -43,6 +43,43 @@ function getPosition(n)
   return new Point(x, y);
 }
 
+function renderUsageGraph(n, usage)
+{
+  if (usage < 100) {
+    var angle = usage / 100 * 360;
+    var points = arcPathPoints(getPosition(n), angle, radius);
+    var arc = new Path.Arc(points);
+  } else {
+    var arc = new Path.Circle(
+        { center: getPosition(n)
+        , radius: radius
+        });
+  }
+
+  arc.strokeColor = strokeColor;
+  arc.strokeWidth = strokeWidth;
+
+  return arc;
+}
+
+function renderUsageText(n, usage)
+{
+    var text = new PointText(
+        { point:         getPosition(n)
+        , fillColor:     fontColor
+        , fontFamily:    fontFamily
+        , fontWeight:    'bold'
+        , fontSize:      fontSize
+        , justification: 'center'
+        , content:       usage.toFixed(0) + '%'
+        });
+
+    // magic values..
+    text.position.y += 8 * text.strokeBounds.height / 30;
+
+    return text;
+}
+
 function main()
 {
   var last = [];
@@ -67,44 +104,24 @@ function main()
 
   var layer = new Layer();
 
+  for (var i = 0; i < ncpus; ++i) {
+    var usage = cpuUsagePercentSinceBoot(coreInfo(i));
+    var graph = renderUsageGraph(i, usage);
+    var text  = renderUsageText(i, usage);
+    layer.addChild(graph);
+    layer.addChild(text);
+  }
+
   setInterval(function() {
     layer.removeChildren();
 
     for (var i = 0; i < ncpus; ++i) {
       var now = coreInfo(i);
-      var usage = cpuUsagePercent(last[i], now);
-
-      if (usage < 100) {
-        var angle = usage / 100 * 360;
-        var points = arcPathPoints(getPosition(i), angle, radius);
-        var arc = new Path.Arc(points);
-      } else {
-        var arc = new Path.Circle(
-            { center: getPosition(i)
-            , radius: radius
-            });
-      }
-
-      arc.strokeColor = strokeColor;
-      arc.strokeWidth = strokeWidth;
-
-      layer.addChild(new Path.Arc(points));
-
-      var text = new PointText(
-          { point:         getPosition(i)
-          , fillColor:     '#808080'
-          , fontFamily:    fontFamily
-          , fontWeight:    'bold'
-          , fontSize:      fontSize
-          , justification: 'center'
-          , content:       usage.toFixed(0) + '%'
-          });
-
-      // magic values..
-      text.position.y += 8 * text.strokeBounds.height / 30;
-
+      var usage = cpuUsagePercent(last[i], now)
+      var graph = renderUsageGraph(i, usage);
+      var text  = renderUsageText(i, usage);
+      layer.addChild(graph);
       layer.addChild(text);
-
       last[i] = now;
     }
 
