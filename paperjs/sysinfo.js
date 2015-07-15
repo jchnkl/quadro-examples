@@ -1,3 +1,5 @@
+var columns = 2;
+
 var gap = 10;
 var radius = 50;
 var strokeWidth = 40;
@@ -27,11 +29,19 @@ function arcPathPoints(center, angle, radius)
   return { from: from_abs, through: through_abs, to: to_abs };
 }
 
-function getPosition(i)
+function getPosition(n)
 {
+  var col = n % columns;
+  var row = Math.ceil((n+1) / columns) - 1;
+
+  console.log('n: ' + n + '; col: ' + col + '; row: ' + row);
+
   var x = strokeWidth / 2 + gap + radius
-        + 2 * i * (strokeWidth / 2 + gap + radius);
-  var y = strokeWidth / 2 + gap + radius;
+        + 2 * col * (strokeWidth / 2 + gap + radius);
+
+  var y = strokeWidth / 2 + gap + radius
+        + 2 * row * (strokeWidth / 2 + gap + radius);
+
   return new Point(x, y);
 }
 
