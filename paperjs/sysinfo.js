@@ -34,8 +34,6 @@ function getPosition(n)
   var col = n % columns;
   var row = Math.ceil((n+1) / columns) - 1;
 
-  console.log('n: ' + n + '; col: ' + col + '; row: ' + row);
-
   var x = strokeWidth / 2 + gap + radius
         + 2 * col * (strokeWidth / 2 + gap + radius);
 
