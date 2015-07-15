@@ -1,12 +1,12 @@
-var columns = 2;
+var columns = 4;
 
 var gap = 10;
 var radius = 50;
 var strokeWidth = 40;
-// var strokeColor = '#fedcba';
-var strokeColor = '#abcdef';
+var strokeColor = '#eea551';
 
 var fontFamily = 'Ubuntu Light';
+var fontColor = strokeColor;
 var fontSize = 20;
 
 function toRad(angle)
@@ -91,12 +91,16 @@ function main()
   var ncpus = getNumCpus();
 
   var bottomLayer = new Layer();
+
+  var bottomColor = new Color(strokeColor).convert('hsb')
+  bottomColor.saturation = 0.2;
+
   for (var i = 0; i < ncpus; ++i) {
     var c = new Path.Circle(
         { center: getPosition(i)
         , radius: radius
-        , opacity: 0.3
-        , strokeColor: '#808080'
+        , opacity: 0.5
+        , strokeColor: bottomColor
         , strokeWidth: strokeWidth
         });
     bottomLayer.addChild(c);
