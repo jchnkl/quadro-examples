@@ -1,3 +1,6 @@
+// change this on ia64 or alpha..
+var USER_HZ = 100;
+
 function getNumCpus()
 {
   var cpuinfo = File.read('/proc/cpuinfo');
@@ -58,4 +61,21 @@ function cpuUsagePercent(pre, now)
   var diff_total = now_total - pre_total;
 
   return 100 * (diff_total - diff_idle) / diff_total;
+}
+
+function cpuUsagePercentSinceBoot(now)
+{
+  var muptime = File.read('/proc/uptime');
+
+  if (muptime.error == null) {
+    var uptime = parseInt(muptime.content.split(' ')[0]);
+
+    var total = now.user + now.system + now.irq + now.softirq
+              + now.steal + now.guest + now.guest_nice;
+
+    return 100 * (total / USER_HZ) / uptime;
+
+  } else {
+    return 0;
+  }
 }
