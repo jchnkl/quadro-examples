@@ -127,7 +127,7 @@ function main()
 
     paper.view.update();
 
-  }, 1000);
+  }, 3000);
 }
 
 main();
