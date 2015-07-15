@@ -18,6 +18,8 @@ function onLoad()
   var last = [];
   for (var i = 0; i < 8; ++i) {
     last[i] = coreInfo(i);
+    var usage = cpuUsagePercentSinceBoot(last[i]);
+    document.getElementById('sysinfo').innerHTML += usage.toFixed(1) + '%<br>';
   }
 
   var ncpus = getNumCpus();
