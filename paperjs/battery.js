@@ -26,11 +26,17 @@ var g_status = {};
 var g_base_circles = new Layer();
 var g_status_circles = new Layer();
 
-function getPosition(i)
+// data.size: size of element
+// data.n: position for nth element
+// data.columns: arrange elements x columns
+function getPosition(data)
 {
-  var x = statusStrokeWidth / 2 + statusGap + statusRadius
-        + 2 * i * (statusStrokeWidth / 2 + statusGap + statusRadius);
-  var y = statusStrokeWidth / 2 + statusGap + statusRadius;
+  var col = data.n % data.columns;
+  var row = Math.ceil((data.n+1) / data.columns) - 1;
+
+  var x = data.size + 2 * col * data.size;
+  var y = data.size + 2 * row * data.size;
+
   return new Point(x, y);
 }
 
@@ -58,8 +64,9 @@ function initBaseCircles()
 {
   var i = 0;
   for (var path in g_status) {
+    var data = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
     var c = new Path.Circle(
-        { center: getPosition(i)
+        { center: getPosition(data)
         , radius: statusRadius
         , opacity: 0.4
         , strokeColor: statusNeutralColor
@@ -81,7 +88,8 @@ function renderStatusCircles()
     var percentage = g_status[path]['percentage'];
 
     var angle = percentage / 100 * 360;
-    var points = arcPathPoints(getPosition(i), angle, statusRadius);
+    var data = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
+    var points = arcPathPoints(getPosition(data), angle, statusRadius);
     var arc = new Path.Arc(points);
 
       // 0: Unknown

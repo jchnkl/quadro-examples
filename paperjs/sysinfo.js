@@ -29,29 +29,30 @@ function arcPathPoints(center, angle, radius)
   return { from: from_abs, through: through_abs, to: to_abs };
 }
 
-function getPosition(n)
+// data.size: size of element
+// data.n: position for nth element
+// data.columns: arrange elements x columns
+function getPosition(data)
 {
-  var col = n % columns;
-  var row = Math.ceil((n+1) / columns) - 1;
+  var col = data.n % data.columns;
+  var row = Math.ceil((data.n+1) / data.columns) - 1;
 
-  var x = strokeWidth / 2 + gap + radius
-        + 2 * col * (strokeWidth / 2 + gap + radius);
-
-  var y = strokeWidth / 2 + gap + radius
-        + 2 * row * (strokeWidth / 2 + gap + radius);
+  var x = data.size + 2 * col * data.size;
+  var y = data.size + 2 * row * data.size;
 
   return new Point(x, y);
 }
 
 function renderUsageGraph(n, usage)
 {
+  var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
   if (usage < 100) {
     var angle = usage / 100 * 360;
-    var points = arcPathPoints(getPosition(n), angle, radius);
+    var points = arcPathPoints(getPosition(data), angle, radius);
     var arc = new Path.Arc(points);
   } else {
     var arc = new Path.Circle(
-        { center: getPosition(n)
+        { center: getPosition(data)
         , radius: radius
         });
   }
@@ -64,8 +65,9 @@ function renderUsageGraph(n, usage)
 
 function renderUsageText(n, usage)
 {
+    var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
     var text = new PointText(
-        { point:         getPosition(n)
+        { point:         getPosition(data)
         , fillColor:     fontColor
         , fontFamily:    fontFamily
         , fontWeight:    'bold'
@@ -95,9 +97,10 @@ function main()
   var bottomColor = new Color(strokeColor).convert('hsb')
   bottomColor.saturation = 0.2;
 
-  for (var i = 0; i < ncpus; ++i) {
+  for (var n = 0; n < ncpus; ++n) {
+    var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
     var c = new Path.Circle(
-        { center: getPosition(i)
+        { center: getPosition(data)
         , radius: radius
         , opacity: 0.5
         , strokeColor: bottomColor
