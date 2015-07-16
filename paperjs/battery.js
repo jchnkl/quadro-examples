@@ -1,6 +1,10 @@
-var batteries = [ '/org/freedesktop/UPower/devices/battery_BAT0'
-                , '/org/freedesktop/UPower/devices/battery_BAT1'
-                ];
+var batteries = [];
+
+for (var dev in upowerEnumerateDevices()) {
+  if (upowerGetType(dev) == Type.Battery) {
+    batteries.push(dev);
+  }
+}
 
 var fontFamily = 'Ubuntu Light';
 var fontSize = 50;
@@ -34,9 +38,19 @@ function initPercentage()
 {
   for (var i in batteries) {
     var path = batteries[i];
-    var state = upowerGetDeviceProperty(path, 'State');
+    var nativePath = upowerGetNativePath(path);
+
+    // upower state is unreliable
+    var mstate = File.read(nativePath + '/state');
+    if (mstate.error == null) {
+      g_status[path].state = mstate.content;
+    }
+
+    // var state = upowerGetDeviceProperty(path, 'State');
     var percentage = upowerGetDeviceProperty(path, 'Percentage');
-    g_status[path] = { 'state': state, 'percentage': percentage };
+    g_status[path].percentage = percentage;
+
+    // g_status[path] = { 'state': state, 'percentage': percentage };
   }
 }
 
