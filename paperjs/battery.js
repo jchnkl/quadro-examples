@@ -136,14 +136,19 @@ function update(msg)
   renderStatusCircles();
 }
 
-initPercentage();
-initBaseCircles();
-renderStatusCircles();
+function main()
+{
+  initPercentage();
+  initBaseCircles();
+  renderStatusCircles();
 
-DBus.system.attach(
-    'org.freedesktop.UPower',
-    '/org/freedesktop/UPower/devices/battery_BAT1',
-    'org.freedesktop.DBus.Properties',
-    'PropertiesChanged');
+  DBus.system.attach(
+      'org.freedesktop.UPower',
+      '/org/freedesktop/UPower/devices/battery_BAT1',
+      'org.freedesktop.DBus.Properties',
+      'PropertiesChanged');
 
-DBus.system.notify.connect(this, update);
+  DBus.system.notify.connect(this, update);
+}
+
+main()
