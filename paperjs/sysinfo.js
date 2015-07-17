@@ -17,7 +17,10 @@ function renderUsageGraph(n, usage)
   var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
   if (usage < 100) {
     var angle = usage / 100 * 360;
-    var points = arcPathPoints(getPosition(data), angle, radius);
+    var points = arcPathPoints({ center: getPosition(data)
+                               , angle: angle
+                               , radius: radius
+                               });
     var arc = new Path.Arc(points);
   } else {
     var arc = new Path.Circle(

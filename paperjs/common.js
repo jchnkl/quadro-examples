@@ -9,17 +9,17 @@ function toRad(angle)
   return angle / 180.0 * Math.PI;
 }
 
-function arcPathPoints(center, angle, radius)
+function arcPathPoints(data)
 {
-  var rad         = toRad(angle);
+  var rad         = toRad(data.angle);
 
-      from_rel    = new Point(0, -radius);
-      through_rel = new Point(Math.sin(rad / 2) * radius, -Math.cos(rad / 2) * radius);
-      to_rel      = new Point(Math.sin(rad) * radius, -Math.cos(rad) * radius);
+      from_rel    = new Point(0, -data.radius);
+      through_rel = new Point(Math.sin(rad / 2) * data.radius, -Math.cos(rad / 2) * data.radius);
+      to_rel      = new Point(Math.sin(rad) * data.radius, -Math.cos(rad) * data.radius);
 
-      from_abs    = new Point(center) + from_rel;
-      through_abs = new Point(center) + through_rel;
-      to_abs      = new Point(center) + to_rel;
+      from_abs    = new Point(data.center) + from_rel;
+      through_abs = new Point(data.center) + through_rel;
+      to_abs      = new Point(data.center) + to_rel;
 
   return { from: from_abs, through: through_abs, to: to_abs };
 }
