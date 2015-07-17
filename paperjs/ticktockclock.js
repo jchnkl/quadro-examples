@@ -87,7 +87,6 @@ function addTime(pathfn, layer, from, till, base)
     from = 1;
     layer.removeChildren();
   }
-  console.log('addTime from ' + from + ' till ' + till);
   for (var t = from; t <= till % base; ++t) {
     layer.addChild(pathfn(center, t));
   }
