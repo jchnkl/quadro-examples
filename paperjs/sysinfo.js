@@ -14,17 +14,17 @@ var arcPathPoints = window.common.arcPathPoints;
 
 function renderUsageGraph(n, usage)
 {
-  var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
+  var posargs = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
   if (usage < 100) {
     var angle = usage / 100 * 360;
-    var points = arcPathPoints({ center: getPosition(data)
+    var points = arcPathPoints({ center: getPosition(posargs)
                                , angle: angle
                                , radius: radius
                                });
     var arc = new Path.Arc(points);
   } else {
     var arc = new Path.Circle(
-        { center: getPosition(data)
+        { center: getPosition(posargs)
         , radius: radius
         });
   }
@@ -37,9 +37,11 @@ function renderUsageGraph(n, usage)
 
 function renderUsageText(n, usage)
 {
-    var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
     var text = new PointText(
-        { point:         getPosition(data)
+        { point:         getPosition({ n: n
+                                     , columns: columns
+                                     , size: strokeWidth / 2 + gap + radius
+                                     })
         , fillColor:     fontColor
         , fontFamily:    fontFamily
         , fontWeight:    'bold'
@@ -70,11 +72,13 @@ function main()
   bottomColor.saturation = 0.2;
 
   for (var n = 0; n < ncpus; ++n) {
-    var data = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
     var c = new Path.Circle(
-        { center: getPosition(data)
-        , radius: radius
-        , opacity: 0.5
+        { center:      getPosition({ n: n
+                                   , columns: columns
+                                   , size:    strokeWidth / 2 + gap + radius
+                                   })
+        , radius:      radius
+        , opacity:     0.5
         , strokeColor: bottomColor
         , strokeWidth: strokeWidth
         });
