@@ -288,6 +288,9 @@ function draw(hour, minute, second)
     addSeconds(1, second);
     addMinutes(1, minute);
     addHours(1, hour);
+    secondText.content = ('00' + second).slice(-2);
+    minuteText.content = ('00' + minute).slice(-2);
+    hourText.content = ('00' + hour).slice(-2);
   }
 
   currentSecond = second;
