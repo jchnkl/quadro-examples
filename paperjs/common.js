@@ -20,17 +20,7 @@ function fromRad(rad)
 // data.center: center position as Point
 function arcPathPoints(data)
 {
-  var rad         = toRad(data.angle);
-
-      from_rel    = new Point(0, -data.radius);
-      through_rel = new Point(Math.sin(rad / 2) * data.radius, -Math.cos(rad / 2) * data.radius);
-      to_rel      = new Point(Math.sin(rad) * data.radius, -Math.cos(rad) * data.radius);
-
-      from_abs    = new Point(data.center) + from_rel;
-      through_abs = new Point(data.center) + through_rel;
-      to_abs      = new Point(data.center) + to_rel;
-
-  return { from: from_abs, through: through_abs, to: to_abs };
+  return segmentPathPoints({ from: 0, to: data.angle, radius: data.radius, center: data.center });
 }
 
 // draw a circle segment beginning at from and ending at to
