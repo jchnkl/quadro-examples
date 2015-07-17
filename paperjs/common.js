@@ -9,6 +9,9 @@ function toRad(angle)
   return angle / 180.0 * Math.PI;
 }
 
+// data.angle: arc angle from 0 on
+// data.radius: radius of circle arc
+// data.center: center position as Point
 function arcPathPoints(data)
 {
   var rad         = toRad(data.angle);
