@@ -28,38 +28,21 @@ var secondRadius = (size.width - 2 * secondStrokeWidth) / 2;
 var minuteRadius = secondRadius - minuteStrokeWidth;
 var hourRadius = minuteRadius - hourStrokeWidth;
 
-function toRad(angle)
-{
-  return angle / 180.0 * Math.PI;
-}
-
-function segmentPathPoints(center, angle, radius, gap)
-{
-  var gap_rad      = toRad(gap);
-      angle_rad     = toRad(angle);
-
-      from_angle    = angle_rad - 2 * gap_rad;
-      through_angle = angle_rad - gap_rad ;
-      to_angle      = angle_rad ;
-
-      from_rel      = new Point(Math.sin(from_angle) * radius, -Math.cos(from_angle) * radius);
-      through_rel   = new Point(Math.sin(through_angle) * radius, -Math.cos(through_angle) * radius);
-      to_rel        = new Point(Math.sin(to_angle) * radius, -Math.cos(to_angle) * radius);
-
-      from_abs    = new Point(center) + from_rel;
-      through_abs = new Point(center) + through_rel;
-      to_abs      = new Point(center) + to_rel;
-
-  return { from: from_abs, through: through_abs, to: to_abs };
-}
+var segmentPathPoints = window.common.segmentPathPoints;
 
 function segmentPath(center, radius, time_base, time)
 {
-  var angle = (time / time_base) * 360;
-  var gap = (360 / time_base) / 2 - 0.5;
-  var points = segmentPathPoints(center, angle, radius, gap);
-  var arc = new Path.Arc(points);
+  var gap    = 0.5;
+      angle  = (time / time_base) * 360;
+      width  = 360 / time_base;
+      from   = angle - width + gap;
+      to     = angle - gap;
+
+      points = segmentPathPoints({ from: from, to: to, radius: radius, center: center });
+      arc    = new Path.Arc(points);
+
   arc.opacity = 0.9;
+
   return arc;
 }
 
