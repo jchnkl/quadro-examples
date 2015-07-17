@@ -1,10 +1,10 @@
 var batteries = [];
 
-for (var dev in upowerEnumerateDevices()) {
+upowerEnumerateDevices().forEach(function(dev) {
   if (upowerGetType(dev) == Type.Battery) {
     batteries.push(dev);
   }
-}
+});
 
 var fontFamily = 'Ubuntu Light';
 var fontSize = 50;
