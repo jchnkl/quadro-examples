@@ -78,9 +78,9 @@ function initBaseCircles()
 {
   var i = 0;
   for (var path in g_status) {
-    var data = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
+    var posargs = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
     var c = new Path.Circle(
-        { center: getPosition(data)
+        { center: getPosition(posargs)
         , radius: statusRadius
         , opacity: 0.4
         , strokeColor: statusNeutralColor
