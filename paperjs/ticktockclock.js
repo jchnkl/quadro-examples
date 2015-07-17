@@ -251,76 +251,48 @@ var doRemoveHours   = false;
 
 function draw(hour, minute, second)
 {
-  // console.log(hour + ':' + minute + ':' + second
-  //  + ' || ' + currentHour + ':' + currentMinute + ':' + currentSecond);
+  var secondNotSlipped = second == currentSecond || second == (currentSecond + 1) % 60;
+  var minuteNotSlipped = minute == currentMinute || minute == (currentMinute + 1) % 60;
+  var hourNotSlipped   = hour   == currentHour   || hour == (currentHour + 1) % 24;
 
-//   var secondSlipped = second < currentSecond || second > currentSecond + 1;
-//
-//   var minuteSlipped = minute != currentMinute
-//                    && (minute < currentMinute || minute > currentMinute + 1);
-//
-//   var hourSlipped = hour != currentHour
-//                  && (hour < currentHour || hour > currentHour + 1);
-
-  var secondNotSlipped = second == currentSecond || second == currentSecond + 1;
-  var minuteNotSlipped = minute == currentMinute || minute == currentMinute + 1;
-  var hourNotSlipped   = hour   == currentHour   || hour == currentHour + 1;
-
-  // if (secondSlipped || minuteSlipped || hourSlipped) {
   if (secondNotSlipped && minuteNotSlipped && hourNotSlipped) {
-
-    if (doRemoveSeconds) {
-      doRemoveSeconds = false;
+    if (second == 1) {
       secondLayer.removeChildren();
-    }
-
-    if (doRemoveMinutes) {
-      doRemoveMinutes = false;
-      minuteLayer.removeChildren();
-    }
-
-    if (doRemoveHours) {
-      doRemoveHours = false;
-      hourLayer.removeChildren();
-    }
-
-    if (second == currentSecond + 1) {
+      secondLayer.addChild(secondPath(center, second));
+    } else {
       secondText.content = ('00' + second).slice(-2);
       secondLayer.addChild(secondPath(center, second));
     }
 
-    if (minute == currentMinute + 1) {
-      doRemoveSeconds = true;
+    if (second == 1 && minute % 60 == 0) {
+      minuteLayer.removeChildren();
+    } else if (minute == (currentMinute + 1) % 60) {
       minuteText.content = ('00' + minute).slice(-2);
       minuteLayer.addChild(minutePath(center, minute));
     }
 
-    if (hour == currentHour + 1) {
-      doRemoveMinutes = true;
+    if (second == 1 && hour % 24 == 0) {
+      hourLayer.removeChildren();
+    } else if (hour == (currentHour + 1) % 24) {
+      if (hour == 13) {
+        hourLayer.removeChildren();
+      }
       hourText.content = ('00' + hour).slice(-2);
       hourLayer.addChild(hourPath(center, hour));
     }
 
-    if (hour % 12 == 0) {
-      doRemoveHours = true;
-    }
-
   } else {
-    console.log('slipped');
-    doRemoveSeconds = false;
-    doRemoveMinutes = false;
-    doRemoveHours   = false;
-    secondText.content = ('00' + second).slice(-2);
-    minuteText.content = ('00' + minute).slice(-2);
-    hourText.content = ('00' + hour).slice(-2);
-    addSeconds(currentSecond + 1, second);
-    addMinutes(currentMinute + 1, minute);
-    addHours(currentHour + 1, hour);
+    secondLayer.removeChildren();
+    minuteLayer.removeChildren();
+    hourLayer.removeChildren();
+    addSeconds(1, second);
+    addMinutes(1, minute);
+    addHours(1, hour);
   }
 
   currentSecond = second;
   currentMinute = minute;
-  currentHour = hour;
+  currentHour   = hour;
 
   paper.view.update();
 }
