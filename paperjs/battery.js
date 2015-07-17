@@ -19,6 +19,8 @@ var statusNeutralColor = '#808080';
 
 /******************************************************************************/
 
+var sysPath = '/sys/class/power_supply';
+
 var size = view.size;
 var center = { x: size.width / 2, y: size.height / 2 };
 
@@ -29,23 +31,46 @@ var g_status_circles = new Layer();
 var getPosition = window.common.getPosition;
 var arcPathPoints = window.common.arcPathPoints;
 
+var State = {
+  Unknown:     0,
+  Charging:    1,
+  Discharging: 2
+};
+
+function toState(status)
+{
+  switch(status) {
+    case 'Unknown': return State.Unknown;
+    case 'Charging': return State.Charging;
+    case 'Discharging': return State.Discharging;
+  };
+}
+
+function updateState(path)
+{
+  var nativePath = upowerGetNativePath(path);
+  var mstate = File.read(sysPath + '/' + nativePath + '/status');
+  if (mstate.error == null) {
+    g_status[path].state = toState(mstate.content.replace(/\n/,''));
+  }
+}
+
 function initPercentage()
 {
   for (var i in batteries) {
     var path = batteries[i];
     var nativePath = upowerGetNativePath(path);
 
+    g_status[path] = { 'state': null, 'percentage': null };
+
+    g_status[path].percentage = upowerGetDeviceProperty(path, 'Percentage');
+
     // upower state is unreliable
-    var mstate = File.read(nativePath + '/state');
+    var mstate = File.read(sysPath + '/' + nativePath + '/status');
+
     if (mstate.error == null) {
-      g_status[path].state = mstate.content;
+      g_status[path].state = toState(mstate.content.replace(/\n/,''));
     }
-
-    // var state = upowerGetDeviceProperty(path, 'State');
-    var percentage = upowerGetDeviceProperty(path, 'Percentage');
-    g_status[path].percentage = percentage;
-
-    // g_status[path] = { 'state': state, 'percentage': percentage };
   }
 }
 
@@ -73,28 +98,24 @@ function renderStatusCircles()
 
   var i = 0;
   for (var path in g_status) {
-    var state      = g_status[path]['state'];
-    var percentage = g_status[path]['percentage'];
+    var state      = g_status[path].state;
+    var percentage = g_status[path].percentage;
 
     var angle = percentage / 100 * 360;
     var posargs = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
     var points = arcPathPoints({ center: getPosition(posargs), angle: angle, radius: statusRadius });
     var arc = new Path.Arc(points);
 
-      // 0: Unknown
-      // 1: Charging
-      // 2: Discharging
-      // 3: Empty
-      // 4: Fully charged
-      // 5: Pending charge
-      // 6: Pending discharge
-
-    if (state == 0) {
-      arc.strokeColor = statusNeutralColor;
-    } else if (state == 2) {
-      arc.strokeColor = statusEmptyColor;
-    } else {
-      arc.strokeColor = statusFullColor;
+    switch (state) {
+      case State.Unknown:
+        arc.strokeColor = statusNeutralColor;
+        break;
+      case State.Charging:
+        arc.strokeColor = statusFullColor;
+        break;
+      case State.Discharging:
+        arc.strokeColor = statusEmptyColor;
+        break;
     }
 
     arc.strokeWidth = statusStrokeWidth;
@@ -109,7 +130,7 @@ function renderStatusCircles()
 function update(msg)
 {
   if (msg.signal == 'PropertiesChanged') {
-    g_status[msg.path]['state'] = msg.contents[1]['State'];
+    updateState(msg.path);
     g_status[msg.path]['percentage'] = msg.contents[1]['Percentage'];
   }
   renderStatusCircles();
