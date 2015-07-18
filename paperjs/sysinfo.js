@@ -1,14 +1,15 @@
 var columns = 4;
 
 var gap = 10;
-var radius = 50;
-var strokeWidth = 40;
-var strokeColor = '#eea551';
+var radius = 35;
+var strokeWidth = 25;
+var strokeColor = '#85b3c4';
 
 var fontFamily = 'Ubuntu Light';
-var fontColor = strokeColor;
-var fontSize = 20;
+var fontColor = '#85b3c4';
+var fontSize = 15;
 
+var multiCircle = window.common.multiCircle;
 var getPosition = window.common.getPosition;
 var arcPathPoints = window.common.arcPathPoints;
 
@@ -66,47 +67,46 @@ function main()
 
   var ncpus = getNumCpus();
 
-  var bottomLayer = new Layer();
-
   var bottomColor = new Color(strokeColor).convert('hsb')
   bottomColor.saturation = 0.2;
 
-  for (var n = 0; n < ncpus; ++n) {
-    var c = new Path.Circle(
-        { center:      getPosition({ n: n
-                                   , columns: columns
-                                   , size:    strokeWidth / 2 + gap + radius
-                                   })
-        , radius:      radius
-        , opacity:     0.5
-        , strokeColor: bottomColor
-        , strokeWidth: strokeWidth
-        });
-    bottomLayer.addChild(c);
-  }
-
   var layer = new Layer();
-
-  for (var i = 0; i < ncpus; ++i) {
-    var usage = cpuUsagePercentSinceBoot(coreInfo(i));
-    var graph = renderUsageGraph(i, usage);
-    var text  = renderUsageText(i, usage);
-    layer.addChild(graph);
-    layer.addChild(text);
-  }
 
   setInterval(function() {
     layer.removeChildren();
 
+    var infos = [];
+
     for (var i = 0; i < ncpus; ++i) {
       var now = coreInfo(i);
-      var usage = cpuUsagePercent(last[i], now)
-      var graph = renderUsageGraph(i, usage);
-      var text  = renderUsageText(i, usage);
-      layer.addChild(graph);
-      layer.addChild(text);
+      var usage = cpuUsagePercent(last[i], now);
+
+      var color = new Color(strokeColor);
+      color.red   += 0.4 * usage / 100;
+      color.green -= 0.2 * usage / 100;
+      color.blue  -= 0.2 * usage / 100;
+
+      infos.push({ percent: usage
+                 , color: color
+                 , text: 'Core ' + i + '    ' + usage.toFixed(0) + '%'
+                 });
+
       last[i] = now;
     }
+
+    layer = multiCircle({ infos: infos.reverse()
+                        , center: { x: view.size.width / 2, y: view.size.height / 2 }
+                        , innerRadius: 0.5 * view.size.width / 4
+                        , outerRadius: view.size.width / 4
+                        , gap: 2
+                        , color: color
+                        , opacity: 1.0
+                        , baseColor: bottomColor
+                        , baseOpacity: 0.4
+                        , fontColor: fontColor
+                        , fontFamily: fontFamily
+                        });
+
 
     paper.view.update();
 
