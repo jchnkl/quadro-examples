@@ -85,7 +85,6 @@ function multiCircle(args)
       baseOpacity = args.baseOpacity;
       fontColor   = args.fontColor;
       fontFamily  = args.fontFamily;
-      // fontSize    = args.fontSize;
 
       width       = (outerRadius - innerRadius) / infos.length - gap;
 
@@ -96,16 +95,6 @@ function multiCircle(args)
   var layer = new Layer();
 
   for (var i = 0; i < infos.length; ++i) {
-    // var posargs = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
-    // var c = new Path.Circle(
-    //     // { center: getPosition(posargs)
-    //     { center: center
-    //     , radius: infos[i].radius
-    //     , opacity: baseOpacity
-    //     , strokeColor: baseColor
-    //     , strokeWidth: width
-    //     });
-
     var from = 90;
         to   = 360;
         points = segmentPathPoints({ center: center, radius: infos[i].radius, from: from, to: to });
@@ -116,14 +105,9 @@ function multiCircle(args)
     arc.strokeWidth = width;
 
     layer.addChild(arc);
-
-    // layer.addChild(c);
   }
-    // console.log('width: ' + width);
 
-  // var i = 0;
   infos.forEach(function(info) {
-    // var radius = innerRadius + i * (gap + width);
 
     var radius  = info.radius;
         percent = info.percent;
@@ -133,42 +117,24 @@ function multiCircle(args)
         points = segmentPathPoints({ center: center, radius: radius, from: from, to: to });
         arc = new Path.Arc(points)
 
-    // console.log('percent: ' + info.percent + '; text: ' + info.text + '; radius: ' + (center.y - radius));
-    // for (p in points) {
-    //   console.log('points[' + p + ']: ' + points[p]);
-    // }
-
+    arc.strokeWidth = width;
     arc.strokeColor = info.color == null ? color : info.color;
     arc.opacity     = info.opacity == null ? opacity : info.opacity;
-    // if (info.color == null) {
-    //   arc.strokeColor = color;
-    // } else {
-    //   arc.strokeColor = info.color;
-    // }
-
-    arc.strokeWidth = width;
-    // arc.opacity     = opacity;
 
     layer.addChild(arc);
 
-    var textX    = center.x + 0.5 * width;
-        textY    = center.y - radius ; // + textSize / 2;
-        textSize = 0.9 * width;
-
     var text = new PointText(
-        { point:         { x: textX, y: textY }
+        { point:         { x: center.x + 0.5 * width, y: center.y - radius }
         , fillColor:     fontColor
         , fontFamily:    fontFamily
         , fontWeight:    'bold'
-        , fontSize:      textSize
+        , fontSize:      0.9 * width
         , justification: 'left'
         , content:       info.text
         });
 
-    // text.position.y += text.bounds.height / 3;
+    // magical values
     text.position.y += 85 * text.strokeBounds.height / 300;
-
-    // text.bounds.height = width;
 
     layer.addChild(text);
 
