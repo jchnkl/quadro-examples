@@ -11,6 +11,23 @@ var fontSize = 15;
 
 var multiCircle = window.common.multiCircle;
 
+function renderUsageLayers(bottomColor, color, infos)
+{
+  return  multiCircle({ infos: infos.reverse()
+                      , center: { x: view.size.width / 2, y: view.size.height / 2 }
+                      , innerRadius: 0.5 * view.size.width / 4
+                      , outerRadius: view.size.width / 4
+                      , gap: 2
+                      , color: color
+                      , opacity: 1.0
+                      , baseColor: bottomColor
+                      , baseOpacity: 0.4
+                      , fontColor: fontColor
+                      , fontFamily: fontFamily
+                      });
+}
+
+
 function main()
 {
   var last = [];
@@ -25,6 +42,26 @@ function main()
   bottomColor.saturation = 0.2;
 
   var layer = new Layer();
+
+  {
+    var infos = [];
+
+    for (var i = 0; i < ncpus; ++i) {
+        var usage = cpuUsagePercentSinceBoot(coreInfo(i));
+
+        var color = new Color(strokeColor);
+        color.red   += 0.4 * usage / 100;
+        color.green -= 0.2 * usage / 100;
+        color.blue  -= 0.2 * usage / 100;
+
+        infos.push({ percent: usage
+                   , color: color
+                   , text: 'Core ' + i + '    ' + usage.toFixed(0) + '%'
+                   });
+    }
+
+    layer.addChild(renderUsageLayers(bottomColor, color, infos));
+  }
 
   setInterval(function() {
     layer.removeChildren();
