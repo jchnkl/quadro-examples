@@ -10,52 +10,6 @@ var fontColor = '#85b3c4';
 var fontSize = 15;
 
 var multiCircle = window.common.multiCircle;
-var getPosition = window.common.getPosition;
-var arcPathPoints = window.common.arcPathPoints;
-
-function renderUsageGraph(n, usage)
-{
-  var posargs = { n: n, columns: columns, size: strokeWidth / 2 + gap + radius };
-  if (usage < 100) {
-    var angle = usage / 100 * 360;
-    var points = arcPathPoints({ center: getPosition(posargs)
-                               , angle: angle
-                               , radius: radius
-                               });
-    var arc = new Path.Arc(points);
-  } else {
-    var arc = new Path.Circle(
-        { center: getPosition(posargs)
-        , radius: radius
-        });
-  }
-
-  arc.strokeColor = strokeColor;
-  arc.strokeWidth = strokeWidth;
-
-  return arc;
-}
-
-function renderUsageText(n, usage)
-{
-    var text = new PointText(
-        { point:         getPosition({ n: n
-                                     , columns: columns
-                                     , size: strokeWidth / 2 + gap + radius
-                                     })
-        , fillColor:     fontColor
-        , fontFamily:    fontFamily
-        , fontWeight:    'bold'
-        , fontSize:      fontSize
-        , justification: 'center'
-        , content:       usage.toFixed(0) + '%'
-        });
-
-    // magic values..
-    text.position.y += 8 * text.strokeBounds.height / 30;
-
-    return text;
-}
 
 function main()
 {
