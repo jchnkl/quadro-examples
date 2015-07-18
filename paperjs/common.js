@@ -88,55 +88,62 @@ function multiCircle(args)
 
       width       = (outerRadius - innerRadius) / infos.length - gap;
 
-  for (var i = 0; i < infos.length; ++i) {
-    infos[i].radius = innerRadius + i * (gap + width);
-  }
-
   var layer = new Layer();
 
-  for (var i = 0; i < infos.length; ++i) {
-    var from = 90;
-        to   = 360;
-        points = segmentPathPoints({ center: center, radius: infos[i].radius, from: from, to: to });
-        arc = new Path.Arc(points);
-
-    arc.opacity = baseOpacity;
-    arc.strokeColor = baseColor;
-    arc.strokeWidth = width;
-
-    layer.addChild(arc);
-  }
-
+  var n = 0;
   infos.forEach(function(info) {
 
-    var radius  = info.radius;
-        percent = info.percent;
-        from    = (100 - 0.75 * percent) / 100 * 360;
-        to      = 360;
+    // augment info with radius
+    {
+      info.radius = innerRadius + n * (gap + width);
+      ++n;
+    }
 
-        points = segmentPathPoints({ center: center, radius: radius, from: from, to: to });
-        arc = new Path.Arc(points)
+    // create base circle
+    {
+      var from = 90;
+          to   = 360;
+          points = segmentPathPoints({ center: center, radius: info.radius, from: from, to: to });
+          arc = new Path.Arc(points);
 
-    arc.strokeWidth = width;
-    arc.strokeColor = info.color == null ? color : info.color;
-    arc.opacity     = info.opacity == null ? opacity : info.opacity;
+      arc.opacity = baseOpacity;
+      arc.strokeColor = baseColor;
+      arc.strokeWidth = width;
 
-    layer.addChild(arc);
+      layer.addChild(arc);
+    }
 
-    var text = new PointText(
-        { point:         { x: center.x + 0.5 * width, y: center.y - radius }
-        , fillColor:     fontColor
-        , fontFamily:    fontFamily
-        , fontWeight:    'bold'
-        , fontSize:      0.9 * width
-        , justification: 'left'
-        , content:       info.text
-        });
+    // create actual segment
+    {
+      var radius  = info.radius;
+          percent = info.percent;
+          from    = (100 - 0.75 * percent) / 100 * 360;
+          to      = 360;
 
-    // magical values
-    text.position.y += 85 * text.strokeBounds.height / 300;
+          points = segmentPathPoints({ center: center, radius: radius, from: from, to: to });
+          arc = new Path.Arc(points)
 
-    layer.addChild(text);
+      arc.strokeWidth = width;
+      arc.strokeColor = info.color == null ? color : info.color;
+      arc.opacity     = info.opacity == null ? opacity : info.opacity;
+
+      layer.addChild(arc);
+
+      var text = new PointText(
+          { point:         { x: center.x + 0.5 * width, y: center.y - radius }
+          , fillColor:     fontColor
+          , fontFamily:    fontFamily
+          , fontWeight:    'bold'
+          , fontSize:      0.9 * width
+          , justification: 'left'
+          , content:       info.text
+          });
+
+      // magical values
+      text.position.y += 85 * text.strokeBounds.height / 300;
+
+      layer.addChild(text);
+    }
 
   });
 
