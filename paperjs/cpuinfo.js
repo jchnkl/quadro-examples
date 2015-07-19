@@ -4,8 +4,12 @@ var CpuInfo =
   , getUsageInfos: getUsageInfos
   };
 
-var padConfig = window.common.padConfig;
-var multiCircle = window.common.multiCircle;
+var padConfig                = window.common.padConfig;
+var multiCircle              = window.common.multiCircle;
+var getNumCpus               = window.sysinfo.cpuinfo.getNumCpus;
+var coreInfo                 = window.sysinfo.cpuinfo.coreInfo;
+var cpuUsagePercent          = window.sysinfo.cpuinfo.cpuUsagePercent;
+var cpuUsagePercentSinceBoot = window.sysinfo.cpuinfo.cpuUsagePercentSinceBoot;
 
 function renderUsage(infos)
 {

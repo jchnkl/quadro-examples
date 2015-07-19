@@ -79,3 +79,14 @@ function cpuUsagePercentSinceBoot(now)
     return 0;
   }
 }
+
+if (window.sysinfo == null) {
+  window.sysinfo = {}
+}
+
+window.sysinfo.cpuinfo =
+  { getNumCpus: getNumCpus
+  , coreInfo: coreInfo
+  , cpuUsagePercent: cpuUsagePercent
+  , cpuUsagePercentSinceBoot: cpuUsagePercentSinceBoot
+  };
