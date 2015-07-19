@@ -27,28 +27,61 @@ function update(msg)
   this.render();
 }
 
+function getTime(seconds)
+{
+  var date = new Date(null);
+  date.setSeconds(seconds);
+  return { hours: date.getUTCHours()
+         , minutes: date.getUTCMinutes()
+         , seconds: date.getUTCSeconds()
+         };
+}
+
 function getBatteryInfo(path)
 {
-  var color      = this.config.unknownColor;
+  var rawtime    = null;
+      color      = this.config.unknownColor;
       nativePath = upowerGetNativePath(path);
 
   switch (getState(nativePath)) {
     case State.Charging:
       color = this.config.chargingColor;
+      rawtime = upowerGetDeviceProperty(path, 'TimeToFull');
       break;
     case State.Discharging:
       color = this.config.dischargingColor;
+      rawtime = upowerGetDeviceProperty(path, 'TimeToEmpty');
       break;
     default:
       color = this.config.unknownColor;
+      rawtime = upowerGetDeviceProperty(path, 'TimeToEmpty');
       break;
   };
 
   var percent = upowerGetDeviceProperty(path, 'Percentage');
+  var properties = upowerGetDeviceProperties(path);
+
+  color = new Color(color);
+  color.red   -= 0.4 * percent / 100;
+  color.green += 0.2 * percent / 100;
+  color.blue  += 0.2 * percent / 100;
+
+  var text = '';
+
+  if (rawtime == 0) {
+    text = nativePath + ': ' + percent.toFixed(0) + '%';
+  } else {
+    var time    = getTime(rawtime);
+        hours   = ('00' + time.hours).slice(-2)
+        minutes = ('00' + time.minutes).slice(-2)
+        seconds = ('00' + time.seconds).slice(-2)
+    text = hours + ':' + minutes + ':' + seconds
+         + '@' + (Math.round(properties.EnergyRate * 100) / 100) + 'W';
+  }
 
   return { percent: percent
          , color: color
-         , text: nativePath + '   ' + percent.toFixed(0) + '%'
+         , text: text
          };
 }
 
