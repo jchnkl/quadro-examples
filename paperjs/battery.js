@@ -121,11 +121,13 @@ function main()
   initBaseCircles();
   renderStatusCircles();
 
-  DBus.system.attach(
-      'org.freedesktop.UPower',
-      '/org/freedesktop/UPower/devices/battery_BAT1',
-      'org.freedesktop.DBus.Properties',
-      'PropertiesChanged');
+  for (var path in g_status) {
+    DBus.system.attach(
+        'org.freedesktop.UPower',
+        path,
+        'org.freedesktop.DBus.Properties',
+        'PropertiesChanged');
+  }
 
   DBus.system.notify.connect(this, update);
 }
