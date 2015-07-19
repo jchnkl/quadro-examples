@@ -91,7 +91,7 @@ function main()
 
     , center:           { x: view.size.width / 2, y: view.size.height / 2 }
 
-    , innerRadius:      0.25 * radius / 2
+    , innerRadius:      0.5 * radius / 2
     , outerRadius:      radius / 2
 
     , circleGap:        2
@@ -99,9 +99,9 @@ function main()
     , statusColor:      '#85b3c4'
     , statusCpacity:    1.0
 
-    , fontFamily:       'Ubuntu Light'
+    , fontFamily:       'Ubuntu Condensed'
     , fontColor:        '#85b3c4'
-    , relFontSize:      0.5
+    , relFontSize:      0.75
 
     , baseOpacity:      0.6
 

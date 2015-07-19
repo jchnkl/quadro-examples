@@ -70,7 +70,7 @@ function main()
     , statusColor:   '#85b3c4'
     , statusCpacity: 1.0
 
-    , fontFamily:    'Ubuntu Light'
+    , fontFamily:    'Ubuntu Condensed'
     , fontColor:     '#85b3c4'
     , relFontSize:   0.75
 
