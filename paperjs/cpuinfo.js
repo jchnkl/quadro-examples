@@ -65,7 +65,9 @@ function getUsageInfos(getCoreUsage)
 function main()
 {
   var defaultConfig =
-    { center: { x: view.size.width / 2, y: view.size.height / 2 }
+    { interval:      3
+
+    , center:        { x: view.size.width / 2, y: view.size.height / 2 }
 
     , innerRadius: 0.5 * view.size.width / 2
     , outerRadius: view.size.width / 2
@@ -114,7 +116,7 @@ function main()
     layer = self.renderUsage(infos);
 
     paper.view.update();
-  }, 3000)
+  }, self.config.interval * 1000)
 }
 
 CpuInfo.main();
