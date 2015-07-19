@@ -37,17 +37,17 @@ function getUsageInfos(getCoreUsage)
   var infos = [];
 
   for (var n = 0; n < this.ncpus; ++n) {
-      var usage = getCoreUsage(n);
+    var usage = getCoreUsage(n);
 
-      var color = new Color(this.config.statusColor);
-      color.red   += 0.4 * usage / 100;
-      color.green -= 0.2 * usage / 100;
-      color.blue  -= 0.2 * usage / 100;
+    var color = new Color(this.config.statusColor);
+    color.red   += 0.4 * usage / 100;
+    color.green -= 0.2 * usage / 100;
+    color.blue  -= 0.2 * usage / 100;
 
-      infos.push({ percent: usage
-                 , color: color
-                 , text: 'Core ' + n + '    ' + usage.toFixed(0) + '%'
-                 });
+    infos.push({ percent: usage
+               , color: color
+               , text: 'Core ' + n + '    ' + usage.toFixed(0) + '%'
+               });
   }
 
   return infos;
