@@ -22,23 +22,23 @@ function padConfig(defaultConfig, partialConfig)
 
 function renderUsage(infos)
 {
-  return  multiCircle({ infos:         infos.reverse()
-                      , center:        this.config.center
-                      , innerRadius:   this.config.innerRadius
-                      , outerRadius:   this.config.outerRadius
+  return multiCircle({ infos:         infos.reverse()
+                     , center:        this.config.center
+                     , innerRadius:   this.config.innerRadius
+                     , outerRadius:   this.config.outerRadius
 
-                      , circleGap:     this.config.circleGap
+                     , circleGap:     this.config.circleGap
 
-                      , statusColor:   this.config.statusColor
-                      , statusCpacity: this.config.statusCpacity
+                     , statusColor:   this.config.statusColor
+                     , statusCpacity: this.config.statusCpacity
 
-                      , fontFamily:    this.config.fontFamily
-                      , fontColor:     this.config.fontColor
-                      , fontSize:      this.config.fontSize
+                     , fontFamily:    this.config.fontFamily
+                     , fontColor:     this.config.fontColor
+                     , fontSize:      this.config.fontSize
 
-                      , baseColor:     this.config.baseColor
-                      , baseOpacity:   this.config.baseOpacity
-                      });
+                     , baseColor:     this.config.baseColor
+                     , baseOpacity:   this.config.baseOpacity
+                     });
 }
 
 function getUsageInfos(getCoreUsage)
