@@ -114,7 +114,7 @@ function main()
       return cpuUsagePercent(old, now);
     });
 
-    layer = self.renderUsage(infos);
+    self.layer = self.renderUsage(infos);
 
     paper.view.update();
   }, self.config.interval * 1000)
