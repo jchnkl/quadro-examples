@@ -75,7 +75,7 @@ function main()
     , relFontSize:   0.75
 
     , baseOpacity:   0.6
-    }
+    };
 
   defaultConfig.baseColor = new Color(defaultConfig.statusColor).convert('hsb');
   defaultConfig.baseColor.saturation = 0.2;
