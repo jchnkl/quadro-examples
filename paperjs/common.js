@@ -33,21 +33,18 @@ function multiCircle(args)
       width       = (outerRadius - innerRadius) / infos.length - circleGap;
 
   var layer = new Layer();
+  var length = infos.length;
 
-  var n = 0;
-  infos.forEach(function(info) {
+  for (var n = length - 1; n >= 0; --n) {
 
-    // augment info with radius
-    {
-      info.radius = innerRadius + n * (circleGap + width);
-      ++n;
-    }
+    var info = infos[n];
+    var radius = innerRadius + (length - n - 1) * (circleGap + width);
 
     // create base circle
     {
       var from = 90;
           to   = 360;
-          points = segmentPathPoints({ center: center, radius: info.radius, from: from, to: to });
+          points = segmentPathPoints({ center: center, radius: radius, from: from, to: to });
           arc = new Path.Arc(points);
 
       arc.opacity = baseOpacity;
@@ -59,8 +56,7 @@ function multiCircle(args)
 
     // create actual segment
     {
-      var radius  = info.radius;
-          percent = info.percent;
+      var percent = info.percent;
           from    = (100 - 0.75 * percent) / 100 * 360;
           to      = 360;
 
@@ -89,7 +85,7 @@ function multiCircle(args)
       layer.addChild(text);
     }
 
-  });
+  }
 
   return layer;
 }

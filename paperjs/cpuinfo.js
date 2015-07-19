@@ -36,7 +36,7 @@ function getUsageInfos(getCoreUsage)
 {
   var infos = [];
 
-  for (var n = this.ncpus - 1; n >= 0; --n) {
+  for (var n = 0; n < this.ncpus; ++n) {
     var usage = getCoreUsage(n);
 
     var color = new Color(this.config.statusColor);
