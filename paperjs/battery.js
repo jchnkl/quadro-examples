@@ -1,135 +1,139 @@
-var batteries = [];
+var BatteryInfo =
+  { main: main
+  , render: render
+  , update: update
+  , getBatteryInfo: getBatteryInfo
+  };
 
-upowerEnumerateDevices().forEach(function(dev) {
-  if (upowerGetType(dev) == Type.Battery) {
-    batteries.push(dev);
-  }
-});
-
-var fontFamily = 'Ubuntu Light';
-var fontSize = 50;
-
-var statusGap = 10;
-var statusRadius = 50;
-var statusStrokeWidth = 40;
-
-var statusEmptyColor   = '#ff0000';
-var statusFullColor    = '#00ff00';
-var statusNeutralColor = '#808080';
-
-/******************************************************************************/
-
-var State = window.sysinfo.battery.State;
-var getState = window.sysinfo.battery.getState;
-
-var size = view.size;
-var center = { x: size.width / 2, y: size.height / 2 };
-
-var g_status = {};
-var g_base_circles = new Layer();
-var g_status_circles = new Layer();
-
-var getPosition = window.common.getPosition;
-var arcPathPoints = window.common.arcPathPoints;
+var padConfig   = window.common.padConfig;
+var multiCircle = window.common.multiCircle;
+var State       = window.sysinfo.battery.State;
+var getState    = window.sysinfo.battery.getState;
 
 function updateState(path)
 {
   var nativePath = upowerGetNativePath(path);
-  g_status[path].state = getState(nativePath);
+  this.status[path].state = getState(nativePath);
 }
 
-function initPercentage()
-{
-  for (var i in batteries) {
-    var path = batteries[i];
-    var nativePath = upowerGetNativePath(path);
-
-    g_status[path] = { 'state': null, 'percentage': null };
-
-    g_status[path].percentage = upowerGetDeviceProperty(path, 'Percentage');
-
-    // upower state is unreliable
-    updateState(path);
-  }
-}
-
-function initBaseCircles()
-{
-  var i = 0;
-  for (var path in g_status) {
-    var posargs = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
-    var c = new Path.Circle(
-        { center: getPosition(posargs)
-        , radius: statusRadius
-        , opacity: 0.4
-        , strokeColor: statusNeutralColor
-        , strokeWidth: statusStrokeWidth
-        });
-
-    g_base_circles.addChild(c);
-    ++i;
-  }
-}
-
-function renderStatusCircles()
-{
-  g_status_circles.removeChildren();
-
-  var i = 0;
-  for (var path in g_status) {
-    var state      = g_status[path].state;
-    var percentage = g_status[path].percentage;
-
-    var angle = percentage / 100 * 360;
-    var posargs = { n: i, columns: 1, size: statusStrokeWidth / 2 + statusGap + statusRadius };
-    var points = arcPathPoints({ center: getPosition(posargs), angle: angle, radius: statusRadius });
-    var arc = new Path.Arc(points);
-
-    switch (state) {
-      case State.Unknown:
-        arc.strokeColor = statusNeutralColor;
-        break;
-      case State.Charging:
-        arc.strokeColor = statusFullColor;
-        break;
-      case State.Discharging:
-        arc.strokeColor = statusEmptyColor;
-        break;
-    }
-
-    arc.strokeWidth = statusStrokeWidth;
-
-    g_status_circles.addChild(arc);
-    ++i;
-  }
-
-  paper.view.update();
-}
+// TODO: update when device added / removed
 
 function update(msg)
 {
   if (msg.signal == 'PropertiesChanged') {
-    updateState(msg.path);
-    g_status[msg.path]['percentage'] = msg.contents[1]['Percentage'];
+    this.infos[msg.path] = this.getBatteryInfo(msg.path);
   }
-  renderStatusCircles();
+
+  this.render();
+}
+
+function getBatteryInfo(path)
+{
+  var color      = this.config.unknownColor;
+      nativePath = upowerGetNativePath(path);
+
+  switch (getState(nativePath)) {
+    case State.Charging:
+      color = this.config.chargingColor;
+      break;
+    case State.Discharging:
+      color = this.config.dischargingColor;
+      break;
+    default:
+      color = this.config.unknownColor;
+      break;
+  };
+
+  var percent = upowerGetDeviceProperty(path, 'Percentage');
+
+  return { percent: percent
+         , color: color
+         , text: nativePath + '   ' + percent.toFixed(0) + '%'
+         };
+}
+
+function render()
+{
+  this.layer.removeChildren();
+
+  var infos = [];
+  for (var p in this.infos) {
+    infos.push(this.infos[p]);
+  }
+
+  this.layer = multiCircle({ infos:         infos
+                           , center:        this.config.center
+                           , innerRadius:   this.config.innerRadius
+                           , outerRadius:   this.config.outerRadius
+
+                           , circleGap:     this.config.circleGap
+
+                           , statusColor:   this.config.statusColor
+                           , statusCpacity: this.config.statusCpacity
+
+                           , fontFamily:    this.config.fontFamily
+                           , fontColor:     this.config.fontColor
+                           , relFontSize:   this.config.relFontSize
+
+                           , baseColor:     this.config.baseColor
+                           , baseOpacity:   this.config.baseOpacity
+                           });
+
+  paper.view.update();
 }
 
 function main()
 {
-  initPercentage();
-  initBaseCircles();
-  renderStatusCircles();
+  var radius = Math.min(view.size.width, view.size.height);
 
-  for (var path in g_status) {
-    DBus.system.attach(
-        'org.freedesktop.UPower',
-        path,
-        'org.freedesktop.DBus.Properties',
-        'PropertiesChanged');
-  }
+  var defaultConfig =
+    { interval:         3
 
-  DBus.system.notify.connect(this, update);
+    , center:           { x: view.size.width / 2, y: view.size.height / 2 }
+
+    , innerRadius:      0.25 * radius / 2
+    , outerRadius:      radius / 2
+
+    , circleGap:        2
+
+    , statusColor:      '#85b3c4'
+    , statusCpacity:    1.0
+
+    , fontFamily:       'Ubuntu Light'
+    , fontColor:        '#85b3c4'
+    , relFontSize:      0.5
+
+    , baseOpacity:      0.6
+
+    , unknownColor:     '#808080'
+    , chargingColor:    '#00f000'
+    , dischargingColor: '#f00000'
+    };
+
+  defaultConfig.baseColor = new Color(defaultConfig.statusColor).convert('hsb');
+  defaultConfig.baseColor.saturation = 0.2;
+
+  var self = this;
+
+  self.config = padConfig(defaultConfig, null);
+  self.layer = new Layer();
+  self.infos = {};
+
+  upowerEnumerateDevices().forEach(function(path) {
+    if (upowerGetType(path) == Type.Battery) {
+      self.infos[path] = self.getBatteryInfo(path);
+
+      DBus.system.attach(
+          'org.freedesktop.UPower',
+          path,
+          'org.freedesktop.DBus.Properties',
+          'PropertiesChanged');
+    }
+  });
+
+  self.render();
+
+  DBus.system.notify.connect(self, self.update);
 }
 
-main()
+BatteryInfo.main()
