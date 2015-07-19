@@ -4,21 +4,8 @@ var CpuInfo =
   , getUsageInfos: getUsageInfos
   };
 
+var padConfig = window.common.padConfig;
 var multiCircle = window.common.multiCircle;
-
-function padConfig(defaultConfig, partialConfig)
-{
-  if (partialConfig == null) {
-    return defaultConfig;
-  }
-
-  for (var p in defaultConfig) {
-    if (partialConfig[p] == null) {
-      partialConfig[p] = defaultConfig[p];
-    }
-  }
-  return partialConfig;
-}
 
 function renderUsage(infos)
 {

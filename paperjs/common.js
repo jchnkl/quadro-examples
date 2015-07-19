@@ -4,7 +4,22 @@ window.common =
   , arcPathPoints: arcPathPoints
   , segmentPathPoints: segmentPathPoints
   , getPosition: getPosition
+  , padConfig: padConfig
   };
+
+function padConfig(defaultConfig, partialConfig)
+{
+  if (partialConfig == null) {
+    return defaultConfig;
+  }
+
+  for (var p in defaultConfig) {
+    if (partialConfig[p] == null) {
+      partialConfig[p] = defaultConfig[p];
+    }
+  }
+  return partialConfig;
+}
 
 function toRad(angle)
 {
