@@ -25,10 +25,12 @@ canvas[resize] {
     <script src='dist/paper-full.min.js' type='text/javascript'></script>
     <script src="../org.freedesktop.UPower.js" type='text/javascript'></script>
     <script src="../sysinfo/battery.js" type='text/javascript'></script>
-    <script src='common.js' type='text/paperscript' canvas='canvas'></script>
-    <script src='battery.js' type='text/paperscript' canvas='canvas'></script>
+    <script src='common.js' type='text/paperscript' canvas='batinfo'></script>
+    <script src='battery.js' type='text/paperscript' canvas='batinfo'></script>
+
+  </head>
 
   <body>
-    <canvas id='canvas' resize width='400' height='400'></canvas>
+    <canvas id='batinfo' resize='true'></canvas>
   </body>
 </html>
