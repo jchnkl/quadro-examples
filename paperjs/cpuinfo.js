@@ -70,7 +70,7 @@ function main()
     , innerRadius: 0.5 * view.size.width / 2
     , outerRadius: view.size.width / 2
 
-    , circleGap:         10
+    , circleGap:     2
 
     , statusColor: '#85b3c4'
     , statusCpacity: 1.0
