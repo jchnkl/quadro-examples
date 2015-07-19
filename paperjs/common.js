@@ -85,6 +85,7 @@ function multiCircle(args)
       baseOpacity = args.baseOpacity;
       fontColor   = args.fontColor;
       fontFamily  = args.fontFamily;
+      relFontSize = args.relFontSize;
 
       width       = (outerRadius - innerRadius) / infos.length - circleGap;
 
@@ -134,7 +135,7 @@ function multiCircle(args)
           , fillColor:     fontColor
           , fontFamily:    fontFamily
           , fontWeight:    'bold'
-          , fontSize:      0.9 * width
+          , fontSize:      relFontSize * width
           , justification: 'left'
           , content:       info.text
           });

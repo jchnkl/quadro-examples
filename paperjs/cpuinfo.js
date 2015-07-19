@@ -34,7 +34,7 @@ function renderUsage(infos)
 
                      , fontFamily:    this.config.fontFamily
                      , fontColor:     this.config.fontColor
-                     , fontSize:      this.config.fontSize
+                     , relFontSize:   this.config.relFontSize
 
                      , baseColor:     this.config.baseColor
                      , baseOpacity:   this.config.baseOpacity
@@ -79,7 +79,7 @@ function main()
 
     , fontFamily:    'Ubuntu Light'
     , fontColor:     '#85b3c4'
-    , fontSize:      15
+    , relFontSize:   0.75
 
     , baseOpacity:   0.6
     }
