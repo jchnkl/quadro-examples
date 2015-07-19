@@ -13,7 +13,7 @@ var cpuUsagePercentSinceBoot = window.sysinfo.cpuinfo.cpuUsagePercentSinceBoot;
 
 function renderUsage(infos)
 {
-  return multiCircle({ infos:         infos.reverse()
+  return multiCircle({ infos:         infos
                      , center:        this.config.center
                      , innerRadius:   this.config.innerRadius
                      , outerRadius:   this.config.outerRadius
@@ -36,7 +36,7 @@ function getUsageInfos(getCoreUsage)
 {
   var infos = [];
 
-  for (var n = 0; n < this.ncpus; ++n) {
+  for (var n = this.ncpus - 1; n >= 0; --n) {
     var usage = getCoreUsage(n);
 
     var color = new Color(this.config.statusColor);
