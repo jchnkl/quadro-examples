@@ -1,35 +1,12 @@
 window.common =
-  { toRad: toRad
+  { arcPathPoints: arcPathPoints
   , multiCircle: multiCircle
-  , arcPathPoints: arcPathPoints
   , segmentPathPoints: segmentPathPoints
   , getPosition: getPosition
+  , toRad: toRad
+  , fromRad: fromRad
   , padConfig: padConfig
   };
-
-function padConfig(defaultConfig, partialConfig)
-{
-  if (partialConfig == null) {
-    return defaultConfig;
-  }
-
-  for (var p in defaultConfig) {
-    if (partialConfig[p] == null) {
-      partialConfig[p] = defaultConfig[p];
-    }
-  }
-  return partialConfig;
-}
-
-function toRad(angle)
-{
-  return angle / 180.0 * Math.PI;
-}
-
-function fromRad(rad)
-{
-  return rad * 180.0 / Math.PI;
-}
 
 // data.angle: arc angle from 0 on
 // data.radius: radius of circle arc
@@ -37,45 +14,6 @@ function fromRad(rad)
 function arcPathPoints(data)
 {
   return segmentPathPoints({ from: 0, to: data.angle, radius: data.radius, center: data.center });
-}
-
-// draw a circle segment beginning at from and ending at to
-// data.from: angle in degrees (360) where the segment should begin
-// data.to:   angle in degrees (360) where the segment should end
-// data.radius: circle radius
-// data.center: circle center position as Point
-function segmentPathPoints(args)
-{
-  var from_angle = toRad(args.from);
-      to_angle   = toRad(args.to);
-      radius     = args.radius;
-      center     = args.center;
-
-      through_angle = from_angle + (to_angle - from_angle) / 2;
-
-      from_rel      = new Point(Math.sin(from_angle) * radius, -Math.cos(from_angle) * radius);
-      through_rel   = new Point(Math.sin(through_angle) * radius, -Math.cos(through_angle) * radius);
-      to_rel        = new Point(Math.sin(to_angle) * radius, -Math.cos(to_angle) * radius);
-
-      from_abs      = new Point(center) + from_rel;
-      through_abs   = new Point(center) + through_rel;
-      to_abs        = new Point(center) + to_rel;
-
-  return { from: from_abs, through: through_abs, to: to_abs };
-}
-
-// data.size: size of element
-// data.n: position for nth element
-// data.columns: arrange elements x columns
-function getPosition(data)
-{
-  var col = data.n % data.columns;
-  var row = Math.ceil((data.n+1) / data.columns) - 1;
-
-  var x = data.size + 2 * col * data.size;
-  var y = data.size + 2 * row * data.size;
-
-  return new Point(x, y);
 }
 
 // args.infos: [{ percent: v, text: v }]
@@ -164,4 +102,67 @@ function multiCircle(args)
   });
 
   return layer;
+}
+
+// draw a circle segment beginning at from and ending at to
+// data.from: angle in degrees (360) where the segment should begin
+// data.to:   angle in degrees (360) where the segment should end
+// data.radius: circle radius
+// data.center: circle center position as Point
+function segmentPathPoints(args)
+{
+  var from_angle = toRad(args.from);
+      to_angle   = toRad(args.to);
+      radius     = args.radius;
+      center     = args.center;
+
+      through_angle = from_angle + (to_angle - from_angle) / 2;
+
+      from_rel      = new Point(Math.sin(from_angle) * radius, -Math.cos(from_angle) * radius);
+      through_rel   = new Point(Math.sin(through_angle) * radius, -Math.cos(through_angle) * radius);
+      to_rel        = new Point(Math.sin(to_angle) * radius, -Math.cos(to_angle) * radius);
+
+      from_abs      = new Point(center) + from_rel;
+      through_abs   = new Point(center) + through_rel;
+      to_abs        = new Point(center) + to_rel;
+
+  return { from: from_abs, through: through_abs, to: to_abs };
+}
+
+// data.size: size of element
+// data.n: position for nth element
+// data.columns: arrange elements x columns
+function getPosition(data)
+{
+  var col = data.n % data.columns;
+  var row = Math.ceil((data.n+1) / data.columns) - 1;
+
+  var x = data.size + 2 * col * data.size;
+  var y = data.size + 2 * row * data.size;
+
+  return new Point(x, y);
+}
+
+function toRad(angle)
+{
+  return angle / 180.0 * Math.PI;
+}
+
+function fromRad(rad)
+{
+  return rad * 180.0 / Math.PI;
+}
+
+function padConfig(defaultConfig, partialConfig)
+{
+  if (partialConfig == null) {
+    return defaultConfig;
+  }
+
+  for (var p in defaultConfig) {
+    if (partialConfig[p] == null) {
+      partialConfig[p] = defaultConfig[p];
+    }
+  }
+  return partialConfig;
 }
