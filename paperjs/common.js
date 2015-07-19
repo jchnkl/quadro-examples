@@ -1,13 +1,3 @@
-window.common =
-  { arcPathPoints: arcPathPoints
-  , multiCircle: multiCircle
-  , segmentPathPoints: segmentPathPoints
-  , getPosition: getPosition
-  , toRad: toRad
-  , fromRad: fromRad
-  , padConfig: padConfig
-  };
-
 // data.angle: arc angle from 0 on
 // data.radius: radius of circle arc
 // data.center: center position as Point
@@ -165,4 +155,24 @@ function padConfig(defaultConfig, partialConfig)
     }
   }
   return partialConfig;
+}
+
+if (window.common == null) {
+  window.common =
+    { arcPathPoints: arcPathPoints
+    , multiCircle: multiCircle
+    , segmentPathPoints: segmentPathPoints
+    , getPosition: getPosition
+    , toRad: toRad
+    , fromRad: fromRad
+    , padConfig: padConfig
+    };
+} else {
+  window.common.arcPathPoints     = arcPathPoints;
+  window.common.multiCircle       = multiCircle;
+  window.common.segmentPathPoints = segmentPathPoints;
+  window.common.getPosition       = getPosition;
+  window.common.toRad             = toRad;
+  window.common.fromRad           = fromRad;
+  window.common.padConfig         = padConfig;
 }
