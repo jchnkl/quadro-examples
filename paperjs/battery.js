@@ -21,7 +21,8 @@ function updateState(path)
 function update(msg)
 {
   if (msg.signal == 'PropertiesChanged') {
-    this.infos[msg.path] = this.getBatteryInfo(msg.path);
+    this.infos[msg.path] = this.getBatteryInfo(
+        { path: msg.path, properties: msg.contents[1] });
   }
 
   this.render();
@@ -37,29 +38,31 @@ function getTime(seconds)
          };
 }
 
-function getBatteryInfo(path)
+function getBatteryInfo(args)
 {
-  var rawtime    = null;
+  var path       = args.path;
+      properties = args.properties
+
+      rawtime    = null;
       color      = this.config.unknownColor;
       nativePath = upowerGetNativePath(path);
 
   switch (getState(nativePath)) {
     case State.Charging:
       color = this.config.chargingColor;
-      rawtime = upowerGetDeviceProperty(path, 'TimeToFull');
+      rawtime = properties.TimeToFull;
       break;
     case State.Discharging:
       color = this.config.dischargingColor;
-      rawtime = upowerGetDeviceProperty(path, 'TimeToEmpty');
+      rawtime = properties.TimeToEmpty;
       break;
     default:
       color = this.config.unknownColor;
-      rawtime = upowerGetDeviceProperty(path, 'TimeToEmpty');
+      rawtime = properties.TimeToEmpty;
       break;
   };
 
-  var percent = upowerGetDeviceProperty(path, 'Percentage');
-  var properties = upowerGetDeviceProperties(path);
+  var percent = properties.Percentage;
 
   color = new Color(color);
   color.red   -= 0.4 * percent / 100;
@@ -154,7 +157,8 @@ function main()
 
   upowerEnumerateDevices().forEach(function(path) {
     if (upowerGetType(path) == Type.Battery) {
-      self.infos[path] = self.getBatteryInfo(path);
+      self.infos[path] = self.getBatteryInfo(
+          { path: path, properties: upowerGetDeviceProperties(path) });
 
       DBus.system.attach(
           'org.freedesktop.UPower',
