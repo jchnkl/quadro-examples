@@ -69,24 +69,25 @@ function main()
 
     , center:        { x: view.size.width / 2, y: view.size.height / 2 }
 
-    , innerRadius: 0.5 * view.size.width / 2
-    , outerRadius: view.size.width / 2
+    , innerRadius:   0.5 * view.size.width / 2
+    , outerRadius:   view.size.width / 2
 
     , circleGap:     2
 
-    , statusColor: '#85b3c4'
+    , statusColor:   '#85b3c4'
     , statusCpacity: 1.0
 
-    , fontFamily:  'Ubuntu Light'
-    , fontColor:   '#85b3c4'
-    , fontSize:    15
+    , fontFamily:    'Ubuntu Light'
+    , fontColor:     '#85b3c4'
+    , fontSize:      15
 
-    , baseOpacity: 0.6
+    , baseOpacity:   0.6
     }
 
   defaultConfig.baseColor = new Color(defaultConfig.statusColor).convert('hsb');
   defaultConfig.baseColor.saturation = 0.2;
 
+  // for setInterval
   var self = this;
 
   self.config = padConfig(defaultConfig, null);
