@@ -19,7 +19,8 @@ var statusNeutralColor = '#808080';
 
 /******************************************************************************/
 
-var sysPath = '/sys/class/power_supply';
+var State = window.sysinfo.battery.State;
+var getState = window.sysinfo.battery.getState;
 
 var size = view.size;
 var center = { x: size.width / 2, y: size.height / 2 };
@@ -31,28 +32,10 @@ var g_status_circles = new Layer();
 var getPosition = window.common.getPosition;
 var arcPathPoints = window.common.arcPathPoints;
 
-var State = {
-  Unknown:     0,
-  Charging:    1,
-  Discharging: 2
-};
-
-function toState(status)
-{
-  switch(status) {
-    case 'Unknown': return State.Unknown;
-    case 'Charging': return State.Charging;
-    case 'Discharging': return State.Discharging;
-  };
-}
-
 function updateState(path)
 {
   var nativePath = upowerGetNativePath(path);
-  var mstate = File.read(sysPath + '/' + nativePath + '/status');
-  if (mstate.error == null) {
-    g_status[path].state = toState(mstate.content.replace(/\n/,''));
-  }
+  g_status[path].state = getState(nativePath);
 }
 
 function initPercentage()
@@ -66,11 +49,7 @@ function initPercentage()
     g_status[path].percentage = upowerGetDeviceProperty(path, 'Percentage');
 
     // upower state is unreliable
-    var mstate = File.read(sysPath + '/' + nativePath + '/status');
-
-    if (mstate.error == null) {
-      g_status[path].state = toState(mstate.content.replace(/\n/,''));
-    }
+    updateState(path);
   }
 }
 
