@@ -64,13 +64,15 @@ function getUsageInfos(getCoreUsage)
 
 function main()
 {
+  var radius = Math.min(view.size.width, view.size.height);
+
   var defaultConfig =
     { interval:      3
 
     , center:        { x: view.size.width / 2, y: view.size.height / 2 }
 
-    , innerRadius:   0.5 * view.size.width / 2
-    , outerRadius:   view.size.width / 2
+    , innerRadius:   0.25 * radius / 2
+    , outerRadius:   radius / 2
 
     , circleGap:     2
 
