@@ -67,7 +67,7 @@ function getPosition(data)
 // args.innerRadius: radius of smallest circle
 // args.outerRadius: radius of biggest circle
 // args.center: center position as Point
-// args.gap: gap between circle segments
+// args.circleGap: gap between circle segments
 // args.color: color of status circle segment
 // args.opacity: opacity of stauts circle segment
 // args.baseColor: color of background circle
@@ -78,7 +78,7 @@ function multiCircle(args)
       center      = args.center;
       innerRadius = args.innerRadius;
       outerRadius = args.outerRadius;
-      gap         = args.gap;
+      circleGap   = args.circleGap;
       color       = args.color;
       opacity     = args.opacity;
       baseColor   = args.baseColor;
@@ -86,7 +86,7 @@ function multiCircle(args)
       fontColor   = args.fontColor;
       fontFamily  = args.fontFamily;
 
-      width       = (outerRadius - innerRadius) / infos.length - gap;
+      width       = (outerRadius - innerRadius) / infos.length - circleGap;
 
   var layer = new Layer();
 
@@ -95,7 +95,7 @@ function multiCircle(args)
 
     // augment info with radius
     {
-      info.radius = innerRadius + n * (gap + width);
+      info.radius = innerRadius + n * (circleGap + width);
       ++n;
     }
 
