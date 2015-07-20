@@ -64,10 +64,20 @@ function getBatteryInfo(args)
 
   var percent = properties.Percentage;
 
-  color = new Color(color);
-  color.red   -= 0.4 * percent / 100;
-  color.green += 0.2 * percent / 100;
-  color.blue  += 0.2 * percent / 100;
+  var max_color = new Color('#618a3d');
+  var med_color = new Color('#eee04c');
+  var min_color = new Color('#ec3b3b');
+
+  var pcent = percent / 100;
+  var color = new Color(null);
+
+  var med = Math.abs(Math.round(pcent) * 2 - pcent * 2);
+      min = (1 - pcent) - med / 2;
+      max = pcent - med / 2;
+
+  color.red   = max * max_color.red   + med * med_color.red   + min * min_color.red;
+  color.green = max * max_color.green + med * med_color.green + min * min_color.green;
+  color.blue  = max * max_color.blue  + med * med_color.blue  + min * min_color.blue;
 
   var text = '';
 
