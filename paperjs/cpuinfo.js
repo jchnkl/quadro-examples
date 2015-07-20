@@ -46,7 +46,7 @@ function getUsageInfos(getCoreUsage)
 
     infos.push({ percent: usage
                , color: color
-               , text: 'Core ' + n + '    ' + usage.toFixed(0) + '%'
+               , text: 'Core ' + (n+1) + '    ' + usage.toFixed(0) + '%'
                });
   }
 
