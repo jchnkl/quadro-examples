@@ -81,14 +81,12 @@ function main()
     , statusCpacity: 1.0
 
     , fontFamily:    'Ubuntu Condensed'
-    , fontColor:     '#85b3c4'
-    , relFontSize:   0.75
+    , fontColor:     '#535353'
+    , relFontSize:   0.9
 
-    , baseOpacity:   0.6
+    , baseColor:     '#808080'
+    , baseOpacity:   0.75
     };
-
-  defaultConfig.baseColor = new Color(defaultConfig.statusColor).convert('hsb');
-  defaultConfig.baseColor.saturation = 0.2;
 
   // for setInterval
   var self = this;
