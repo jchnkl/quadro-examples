@@ -161,7 +161,7 @@ function main()
 
   var self = this;
 
-  self.config = padConfig(defaultConfig, null);
+  self.config = padConfig(defaultConfig, window.batinfo.config);
   self.layer = new Layer();
   self.infos = {};
 
