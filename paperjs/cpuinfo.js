@@ -83,7 +83,7 @@ function main()
   // for setInterval
   var self = this;
 
-  self.config = padConfig(defaultConfig, null);
+  self.config = padConfig(defaultConfig, window.cpuinfo.config);
   self.ncpus = getNumCpus();
   self.last = [];
 
