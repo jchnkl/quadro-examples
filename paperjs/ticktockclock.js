@@ -2,7 +2,7 @@ var size = view.size;
 var center = { x: size.width / 2, y: size.height / 2 };
 
 var fontFamily = 'Ubuntu Light';
-var fontSize = 50;
+var fontSize = 40;
 
 var hourStrokeWidth = 35;
 var hourStrokeColor = '#85b3c4';
@@ -23,6 +23,9 @@ var secondFontSize = 40;
 var secondTrailLength = 15;
 var secondFontColor = '#eea551';
 var secondFontFamily = fontFamily;
+
+var dateFontSize = fontSize * 0.5;
+var dateFontColor = '#b3b3b3';
 
 var secondRadius = (size.width - 2 * secondStrokeWidth) / 2;
 var minuteRadius = secondRadius - minuteStrokeWidth;
@@ -172,8 +175,10 @@ addSeconds(1, currentSecond);
 // minuteLayer.addChild(minutePath(center, currentMinute));
 // hourLayer.addChild(hourPath(center, currentHour));
 
+var timePosition = new Point(center.x, center.y - 0.5 * fontSize);
+
 var secondText = new PointText(
-    { point:         center
+    { point:         timePosition
     , fillColor:     secondFontColor
     , fontFamily:    fontFamily
     , fontWeight:    'bold'
@@ -183,7 +188,7 @@ var secondText = new PointText(
     });
 
 var fstSep = new PointText(
-    { point:         center
+    { point:         timePosition
     , opacity:       0.75
     , fillColor:     '#808080'
     , fontFamily:    fontFamily
@@ -194,7 +199,7 @@ var fstSep = new PointText(
     });
 
 var minuteText = new PointText(
-    { point:         center
+    { point:         timePosition
     , fillColor:     minuteFontColor
     , fontFamily:    fontFamily
     , fontWeight:    'bold'
@@ -204,7 +209,7 @@ var minuteText = new PointText(
     });
 
 var sndSep = new PointText(
-    { point:         center
+    { point:         timePosition
     , opacity:       0.75
     , fillColor:     '#808080'
     , fontFamily:    fontFamily
@@ -215,13 +220,45 @@ var sndSep = new PointText(
     });
 
 var hourText   = new PointText(
-    { point:         center
+    { point:         timePosition
     , fillColor:     hourFontColor
     , fontFamily:    fontFamily
     , fontWeight:    'bold'
     , fontSize:      fontSize
     , justification: 'center'
     , content:       ('00' + currentHour).slice(-2)
+    });
+
+var datePosition = new Point(timePosition.x, timePosition.y + 2.25 * dateFontSize);
+
+var dayText = new PointText(
+    { point:         datePosition
+    , fillColor:     dateFontColor
+    , fontFamily:    fontFamily
+    , fontWeight:    'bold'
+    , fontSize:      dateFontSize
+    , justification: 'center'
+    , content:       moment(currentDate).locale('en').format('dddd,')
+    });
+
+var monthText = new PointText(
+    { point:         new Point(datePosition.x, datePosition.y + 1.1 * dateFontSize)
+    , fillColor:     dateFontColor
+    , fontFamily:    fontFamily
+    , fontWeight:    'bold'
+    , fontSize:      dateFontSize
+    , justification: 'center'
+    , content:       moment(currentDate).locale('en').format('Do of MMMM,')
+    });
+
+var yearText = new PointText(
+    { point:         new Point(datePosition.x, datePosition.y + 2.2 * dateFontSize)
+    , fillColor:     dateFontColor
+    , fontFamily:    fontFamily
+    , fontWeight:    'bold'
+    , fontSize:      dateFontSize
+    , justification: 'center'
+    , content:       moment(currentDate).locale('en').format('YYYY')
     });
 
 var circleText = new Layer([secondCircle, minuteCircle, hourCircle]);
@@ -273,6 +310,11 @@ function draw(hour, minute, second)
 
     if (second == 1 && hour % 24 == 0) {
       hourLayer.removeChildren();
+
+      dayText.content = moment(currentDate).locale('en').format('dddd,');
+      monthText.content = moment(currentDate).locale('en').format('Do of MMMM,');
+      yearText.content = moment().locale('en').format('YYYY');
+
     } else if (hour == (currentHour + 1) % 24) {
       if (hour == 13) {
         hourLayer.removeChildren();
