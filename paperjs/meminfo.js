@@ -1,6 +1,6 @@
 var getMemInfo = window.sysinfo.meminfo.getMemInfo;
 
-var CpuInfo =
+var MemInfo =
   { main: main
   , renderUsage: renderUsage
   , getUsageInfos: getUsageInfos
@@ -105,4 +105,4 @@ function main()
   }, self.config.interval * 1000)
 }
 
-CpuInfo.main();
+MemInfo.main();
