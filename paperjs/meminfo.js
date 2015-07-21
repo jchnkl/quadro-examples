@@ -3,7 +3,6 @@ var getMemInfo = window.sysinfo.meminfo.getMemInfo;
 var MemInfo =
   { main: main
   , renderUsage: renderUsage
-  , getUsageInfos: getUsageInfos
   };
 
 var padConfig   = window.common.padConfig;
@@ -33,13 +32,46 @@ function renderUsage(infos)
 
 function getUsageInfos()
 {
+  var meminfo   = getMemInfo();
+      memTotal  = meminfo.MemTotal;
+      swapTotal = meminfo.SwapTotal;
+
   var infos = [];
 
-  var meminfo = getMemInfo();
-      total   = meminfo.MemTotal;
-      active  = meminfo.Active;
+  function addInfo(max_len, name, percent)
+  {
+    var ws = Array(max_len - name.length + 1).join(' ');
+    infos.push({ percent: percent, text: name + '%' + ws + percent.toFixed(0) });
+  }
 
-      usage = (total - active) / total * 100;
+  var max_len = 16; // Committed_AS
+
+  var ps = [ 'Committed_AS'
+           , 'Buffers'
+           , 'Cached'
+           , 'Active'
+           , 'Inactive'
+           , 'Dirty'
+           , 'Writeback'
+           ];
+
+  addInfo(max_len, 'MemUsed', (memTotal - meminfo.MemAvailable) / memTotal * 100);
+
+  ps.forEach(function(p) {
+    addInfo(max_len, p, meminfo[p] / memTotal * 100);
+  });
+
+  if (swapTotal > 0) {
+    addInfo(max_len, 'SwapUsed', (swapTotal - meminfo.SwapFree) / swapTotal * 100);
+    addInfo(max_len, 'SwapCached', meminfo.SwapCached / swapTotal * 100);
+  }
+
+  return infos;
+}
+
+function addUsageColor(info)
+{
+  var usage = info.percent;
 
   var min_color = new Color('#618a3d');
   var med_color = new Color('#eee04c');
@@ -56,12 +88,9 @@ function getUsageInfos()
   color.green = max * max_color.green + med * med_color.green + min * min_color.green;
   color.blue  = max * max_color.blue  + med * med_color.blue  + min * min_color.blue;
 
-  infos.push({ percent: usage
-             , color: color
-             , text: 'Mem% ' + usage.toFixed(0)
-             });
+  info.color = color;
 
-  return infos;
+  return info;
 }
 
 function main()
@@ -94,12 +123,12 @@ function main()
 
   self.config = padConfig(defaultConfig, window.meminfo.config);
 
-  self.layer = self.renderUsage(self.getUsageInfos());
+  self.layer = self.renderUsage(getUsageInfos().map(addUsageColor));
 
   setInterval(function() {
     self.layer.removeChildren();
 
-    self.layer = self.renderUsage(self.getUsageInfos());
+    self.layer = self.renderUsage(getUsageInfos().map(addUsageColor));
 
     paper.view.update();
   }, self.config.interval * 1000)
