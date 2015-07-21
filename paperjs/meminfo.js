@@ -102,17 +102,17 @@ function main()
 
     , center:        { x: view.size.width / 2, y: view.size.height / 2 }
 
-    , innerRadius:   0.4 * radius / 2
+    , innerRadius:   0.1 * radius / 2
     , outerRadius:   radius / 2
 
-    , circleGap:     0
+    , circleGap:     2
 
     , statusColor:   '#85b3c4'
     , statusCpacity: 1.0
 
-    , fontFamily:    'Ubuntu Condensed'
+    , fontFamily:    'Ubuntu Mono'
     , fontColor:     '#535353'
-    , relFontSize:   0.5
+    , relFontSize:   0.85
 
     , baseColor:     '#808080'
     , baseOpacity:   0.75
