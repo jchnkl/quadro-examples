@@ -261,7 +261,8 @@ var yearText = new PointText(
     , content:       moment(currentDate).locale('en').format('YYYY')
     });
 
-var circleText = new Layer([secondCircle, minuteCircle, hourCircle]);
+var circleText = new Layer([secondCircle, minuteCircle, hourCircle,
+                            dayText, monthText, yearText]);
 
 fstSep.position.x = minuteText.position.x
                   - minuteText.bounds.width / 2
