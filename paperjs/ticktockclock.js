@@ -309,7 +309,7 @@ function draw(hour, minute, second)
       minuteLayer.addChild(minutePath(center, minute));
     }
 
-    if (second == 1 && hour % 24 == 0) {
+    if (second == 1 && minute == 0 && hour % 24 == 0) {
       hourLayer.removeChildren();
 
       dayText.content = moment(currentDate).locale('en').format('dddd,');
