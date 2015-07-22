@@ -312,8 +312,8 @@ function draw(hour, minute, second)
     if (second == 1 && minute == 0 && hour % 24 == 0) {
       hourLayer.removeChildren();
 
-      dayText.content = moment(currentDate).locale('en').format('dddd,');
-      monthText.content = moment(currentDate).locale('en').format('Do of MMMM,');
+      dayText.content = moment().locale('en').format('dddd,');
+      monthText.content = moment().locale('en').format('Do of MMMM,');
       yearText.content = moment().locale('en').format('YYYY');
 
     } else if (hour == (currentHour + 1) % 24) {
