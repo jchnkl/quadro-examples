@@ -41,7 +41,7 @@ function getUsageInfos()
   function addInfo(max_len, name, percent)
   {
     var ws = Array(max_len - name.length + 1).join(' ');
-    infos.push({ percent: percent, text: name + '%' + ws + percent.toFixed(0) });
+    infos.push({ percent: percent.toFixed(2), text: name + '%' + ws + percent.toFixed(0) });
   }
 
   var max_len = 16; // Committed_AS
