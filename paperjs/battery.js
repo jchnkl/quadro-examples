@@ -145,8 +145,8 @@ function main()
     , statusColor:      '#85b3c4'
     , statusCpacity:    1.0
 
-    , fontFamily:       'Ubuntu Condensed'
-    , fontColor:        '#85b3c4'
+    , fontFamily:       'Ubuntu Mono'
+    , fontColor:        '#888888'
     , relFontSize:      0.75
 
     , baseOpacity:      0.6
