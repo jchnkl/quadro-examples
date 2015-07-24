@@ -334,6 +334,9 @@ function draw(hour, minute, second)
     secondText.content = ('00' + second).slice(-2);
     minuteText.content = ('00' + minute).slice(-2);
     hourText.content = ('00' + hour).slice(-2);
+    dayText.content = moment().locale('en').format('dddd,');
+    monthText.content = moment().locale('en').format('Do of MMMM,');
+    yearText.content = moment().locale('en').format('YYYY');
   }
 
   currentSecond = second;
