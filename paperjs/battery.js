@@ -7,6 +7,7 @@ var BatteryInfo =
 
 var padConfig   = window.common.padConfig;
 var multiCircle = window.common.multiCircle;
+var colorMix    = window.common.colorMix;
 var State       = window.sysinfo.battery.State;
 var getState    = window.sysinfo.battery.getState;
 
@@ -64,20 +65,11 @@ function getBatteryInfo(args)
 
   var percent = properties.Percentage;
 
-  var max_color = new Color('#618a3d');
-  var med_color = new Color('#eee04c');
-  var min_color = new Color('#ec3b3b');
-
-  var pcent = percent / 100;
-  var color = new Color(null);
-
-  var med = Math.abs(Math.round(pcent) * 2 - pcent * 2);
-      min = (1 - pcent) - med / 2;
-      max = pcent - med / 2;
-
-  color.red   = max * max_color.red   + med * med_color.red   + min * min_color.red;
-  color.green = max * max_color.green + med * med_color.green + min * min_color.green;
-  color.blue  = max * max_color.blue  + med * med_color.blue  + min * min_color.blue;
+  var color = colorMix({ percent: percent / 100
+                       , min_color: '#ec3b3b'
+                       , med_color: '#eee04c'
+                       , max_color: '#618a3d'
+                       });
 
   var text = '';
 

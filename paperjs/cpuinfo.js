@@ -6,6 +6,7 @@ var CpuInfo =
 
 var padConfig                = window.common.padConfig;
 var multiCircle              = window.common.multiCircle;
+var colorMix                 = window.common.colorMix;
 var getNumCpus               = window.sysinfo.cpuinfo.getNumCpus;
 var coreInfo                 = window.sysinfo.cpuinfo.coreInfo;
 var cpuUsagePercent          = window.sysinfo.cpuinfo.cpuUsagePercent;
@@ -39,20 +40,11 @@ function getUsageInfos(getCoreUsage)
   for (var n = 0; n < this.ncpus; ++n) {
     var usage = getCoreUsage(n);
 
-    var min_color = new Color('#618a3d');
-    var med_color = new Color('#eee04c');
-    var max_color = new Color('#ec3b3b');
-
-    var percent = usage / 100;
-    var color = new Color(null);
-
-    var med = Math.abs(Math.round(percent) * 2 - percent * 2);
-        min = (1 - percent) - med / 2;
-        max = percent - med / 2;
-
-    color.red   = max * max_color.red   + med * med_color.red   + min * min_color.red;
-    color.green = max * max_color.green + med * med_color.green + min * min_color.green;
-    color.blue  = max * max_color.blue  + med * med_color.blue  + min * min_color.blue;
+    var color = colorMix({ percent: usage / 100
+                         , min_color: '#618a3d'
+                         , med_color: '#eee04c'
+                         , max_color: '#ec3b3b'
+                         });
 
     infos.push({ percent: usage
                , color: color

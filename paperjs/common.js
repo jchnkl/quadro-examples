@@ -129,6 +129,30 @@ function getPosition(data)
   return new Point(x, y);
 }
 
+// args.percent: defines the ratio of min_color/med_color/max_color
+// args.min_color: color point for   0%, e.g. #618a3d
+// args.med_color: color point for  50%, e.g. #eee04c
+// args.max_color: color point for 100%, e.g. #ec3b3b
+function colorMix(args)
+{
+  var percent   = args.percent;
+      min_color = new Color(args.min_color);
+      med_color = new Color(args.med_color);
+      max_color = new Color(args.max_color);
+
+  var color = new Color(null);
+
+  var med = Math.abs(Math.round(percent) * 2 - percent * 2);
+      min = (1 - percent) - med / 2;
+      max = percent - med / 2;
+
+  color.red   = max * max_color.red   + med * med_color.red   + min * min_color.red;
+  color.green = max * max_color.green + med * med_color.green + min * min_color.green;
+  color.blue  = max * max_color.blue  + med * med_color.blue  + min * min_color.blue;
+
+  return color;
+}
+
 function toRad(angle)
 {
   return angle / 180.0 * Math.PI;
@@ -162,6 +186,7 @@ if (window.common == null) {
     , toRad: toRad
     , fromRad: fromRad
     , padConfig: padConfig
+    , colorMix: colorMix
     };
 } else {
   window.common.arcPathPoints     = arcPathPoints;
@@ -171,4 +196,5 @@ if (window.common == null) {
   window.common.toRad             = toRad;
   window.common.fromRad           = fromRad;
   window.common.padConfig         = padConfig;
+  window.common.colorMix          = colorMix;
 }
