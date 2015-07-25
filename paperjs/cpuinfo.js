@@ -56,7 +56,7 @@ function getUsageInfos(getCoreUsage)
 
     infos.push({ percent: usage
                , color: color
-               , text: 'Core ' + (n+1) + '    ' + usage.toFixed(0) + '%'
+               , text: 'core' + (n+1) + '% ' + usage.toFixed(0)
                });
   }
 
@@ -80,9 +80,9 @@ function main()
     , statusColor:   '#85b3c4'
     , statusCpacity: 1.0
 
-    , fontFamily:    'Ubuntu Condensed'
-    , fontColor:     '#535353'
-    , relFontSize:   0.9
+    , fontFamily:    'Ubuntu Mono'
+    , fontColor:     '#636363'
+    , relFontSize:   0.8
 
     , baseColor:     '#808080'
     , baseOpacity:   0.75
