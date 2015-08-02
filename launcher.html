@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <style type='text/css'>
+
+body {
+  background-color: rgba(0,0,0,0);
+}
+
+.imagedropshadow {
+  padding: 2px;
+}
+
+a:hover img.imagedropshadow {
+  box-shadow: 2px 2px 10px #999;
+}
+
+a:active img.imagedropshadow {
+  box-shadow: inset 2px 2px 10px #999;
+}
+
+    </style>
+
+    <script type='text/javascript'>
+
+function launch(prog, args)
+{
+  var ret = System.exec(prog, args);
+  if (ret.errno) {
+    alert(ret.error + ' (' + ret.errno + ')');
+  }
+}
+
+    </script>
+
+  </head>
+
+  <body>
+    <a onclick="launch('xterm', ['-hold', '-e', 'cal', '-w']);">'cal -w' in terminal</a><br>
+    <a onclick="launch('xfontsel', []);">xfontsel</a><br>
+    <a onclick="launch('Show me an error', []);">Show me an error</a><br>
+
+    <a onclick="launch('xterm', []);">
+      <img class="imagedropshadow" src="/usr/share/icons/elementary-xfce/apps/48/terminal.svg">
+    </a>
+    <a onclick="launch('firefox', ['--new-instance', '-P']);">
+      <img class="imagedropshadow" src="/usr/share/icons/elementary-xfce/apps/48/firefox.png">
+    </a>
+
+  </body>
+</html>
