@@ -12,15 +12,20 @@ var nCpus = getNumCpus();
 var usageData = [];
 var cpuInfo = [];
 
-var svg = null;
+// globals, initialized in main
+var svg         = null;
+    svgWidth    = null;
+    svgHeight   = null;
+    graphWidth  = null;
+    graphHeight = null;
 
 function render(data)
 {
   svg.remove();
-  svg = dimple.newSvg('#cpuinfo', 600, 400);
+  svg = dimple.newSvg('#cpuinfo', svgWidth, svgHeight);
   var chart = new dimple.chart(svg, data);
 
-  chart.setBounds(0, 30, 600, 270);
+  chart.setBounds(0, 0, graphWidth, graphHeight);
 
   var x = chart.addCategoryAxis('x', 'index');
   x.hidden = true;
@@ -34,8 +39,17 @@ function render(data)
   chart.draw();
 }
 
-function main()
+function main(width, height)
 {
+  var div = document.createElement('div');
+  div.id = 'cpuinfo';
+  document.body.appendChild(div);
+
+  svgWidth    = width;
+  svgHeight   = height;
+  graphWidth  = svgWidth;
+  graphHeight = svgHeight - 1;
+  svg         = dimple.newSvg('#cpuinfo', svgWidth, svgHeight);
 
   // var data = [
   //   { index: 0, cpu: 0, usage: 30 },
@@ -66,8 +80,6 @@ function main()
   var index = 0;
   var data = [];
   var last = {};
-
-  svg = dimple.newSvg('#cpuinfo', 600, 400);
 
   // gather initial data points
   for (var n = 0; n < nCpus; ++n) {

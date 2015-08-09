@@ -19,9 +19,14 @@ body {
     <script src='../lib/ext/dimple.js/dimple.v2.1.6.min.js'></script>
     <script src='../lib/cpuinfo.js'></script>
     <script src='cpuinfo.js'></script>
+    <script type='text/javascript'>
+function onLoad()
+{
+  main(0.99 * document.width, 0.84 * document.height);
+}
+    </script>
   </head>
 
-  <body onload='main();'>
-    <div id='cpuinfo'></div>
+  <body onload='onLoad();'>
   </body>
 </html>
