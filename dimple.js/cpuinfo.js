@@ -9,9 +9,6 @@ var nCpus = getNumCpus();
     interval = 3000;
     // interval = 500;
 
-var usageData = [];
-var cpuInfo = [];
-
 // globals, initialized in main
 var svg         = null;
     svgWidth    = null;
