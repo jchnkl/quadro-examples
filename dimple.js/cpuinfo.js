@@ -12,89 +12,24 @@ var nCpus = getNumCpus();
 var usageData = [];
 var cpuInfo = [];
 
-// for (var n = 0; n < maxUsageElems; ++n) {
-//   usageAccu.push(0);
-// }
-
-function getUsageData(args)
-{
-  var nthCpu     = args.nthCpu;
-      cpuUsageFn = args.cpuUsageFn;
-
-  // var percent_sum = 0;
-  // for (var n = 0; n < nCpus; ++n) {
-    // var info = coreInfo(n);
-    // infos[n] = [];
-    // infos[n].push(info);
-    // usage[n] = [];
-    var percent = cpuUsageFn(coreInfo(nthCpu));
-    // usage[n].push([i, cpuUsagePercentSinceBoot(info)]);
-    // percent_sum += usage[n][usage[n].length-1][1];
-  // }
-  return { percent: percent };
-}
-
-
-  // for (var n = 0; n < nCpus; ++n) {
-  //   // console.log('usage[' + n + '][1](' + usage[n][1] + ') /= ' + percent_sum + ' = ' + usage[n][1] / percent_sum);
-  //   usage[n][usage[n].length-1][1] /= percent_sum;
-  //   data.push({ key: n, values: usage[n] });
-  // }
-  //
-  // render(data);
-  //
-  // setInterval(function() {
-  //   ++i;
-  //   data = [];
-  //
-  // // var data = [
-  // //   { key: "", values: [ [0+n,1+n], [2+n,3+n], [4+n,5+n] ] },
-  // //   { key: "", values: [ [6+n,7+n], [8+n,9+n], [10+n,11+n] ] }
-  // // ];
-  //
-  //   var percent_sum = 0;
-  //   for (var n = 0; n < nCpus; ++n) {
-  //     var nInfos = infos[n];
-  //     var now = coreInfo(n);
-  //     usage[n].push([i, cpuUsagePercent(nInfos[nInfos.length - 1], now)]);
-  //     nInfos.push(now);
-  //     percent_sum += usage[n][usage[n].length-1][1];
-  //   }
-  //
-  //   for (var n = 0; n < nCpus; ++n) {
-  //     if (usage[n].length > 30) {
-  //       usage[n].shift();
-  //     }
-  //     usage[n][usage[n].length-1][1] /= percent_sum;
-  //     data.push({ key: n, values: usage[n] });
-  //   }
-
-
 var svg = null;
 
 function render(data)
 {
   svg.remove();
-  // svg = dimple.newSvg('#cpuinfo', 600, 200);
   svg = dimple.newSvg('#cpuinfo', 600, 400);
   var chart = new dimple.chart(svg, data);
 
-  // chart.setBounds(60, 30, 505, 305);
   chart.setBounds(0, 30, 600, 270);
 
   var x = chart.addCategoryAxis('x', 'index');
   x.hidden = true;
-  // x.addOrderRule('cpu');
 
   var y = chart.addMeasureAxis('y', 'usage');
   y.hidden = true;
 
-  // chart.addSeries(function(d) { console.log(d); return d.cpu; }, dimple.plot.area);
-  // chart.addSeries('cpu', dimple.plot.area);
   var s = chart.addSeries('cpu', dimple.plot.area);
   s.interpolation = 'cardinal';
-  // s.lineWeight = 1;
-  // s.layout.stack().offset("wiggle"); // = 'wiggle';
   chart.addLegend(0, 0, 550, 10, 'center');
   chart.draw();
 }
@@ -132,13 +67,7 @@ function main()
   var data = [];
   var last = {};
 
-  // svg = dimple.newSvg('#cpuinfo');
   svg = dimple.newSvg('#cpuinfo', 600, 400);
-
-  // for (var n = 0; n < nCpus; ++n) {
-  //   data.push({ index: index, cpu: 'cpu' + n, usage: 0 });
-  // }
-  // ++index;
 
   for (var n = 0; n < nCpus; ++n) {
     last[n] = coreInfo(n);
@@ -147,83 +76,28 @@ function main()
   }
   ++index;
 
-  // render(data);
-
   setInterval(function() {
 
-    // console.log('data.length: ' + data.length);
-    // if (data.length > nCpus * maxDataElems) {
-    //   console.log('shift');
-    //   data.shift();
-    // }
-
-    // console.log('data.length before: ' + data.length);
-    // var doShift = data.length * nCpus * index % maxDataElems == 0; // data.length > nCpus * maxDataElems;
     var doShift = data.length == nCpus * maxDataElems;
 
     for (var n = 0; n < nCpus; ++n) {
 
       if (doShift) {
-        // console.log('index: ' + index + 'shift ' + n);
-        // console.log('shift');
-        // for (var n = 0; n < nCpus; ++n) {
-          data.shift();
-        // }
+        data.shift();
       }
+
       var now = coreInfo(n);
       var usage = cpuUsagePercent(last[n], coreInfo(n));
       last[n] = now;
-      // data.push([ { index: index, cpu: 'cpu' + n, usage: usage } ]);
+
       data.push({ index: index, cpu: 'cpu' + n, usage: usage });
     }
 
     ++index;
 
-    // console.log('data.length after: ' + data.length);
-
-    // for (var i in data) {
-    //   var obj = data[i];
-    //   // for (var p in obj);
-    //   console.log('index: ' + obj.index + '; cpu: ' + obj.cpu);
-    // }
-
     render(data.slice());
 
   }, interval);
-
-  // var usage = [];
-  //
-  // for (var n = 0; n < nCpus; ++n) {
-  //   usage.push(getUsageData({ nthCpu: n, cpuUsageFn: cpuUsagePercentSinceBoot }));
-  // }
-
-  // var svg = dimple.newSvg('#cpuinfo');
-  //
-  // // d3.tsv("example_data.tsv", function (data) {
-  //
-  //   // data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"]);
-  //
-  //   // var obj = data[0];
-  //   // for (var p in obj) {
-  //   //   console.log('obj[' + p + '] = ' + obj[p]);
-  //   // }
-  //
-  //   var myChart = new dimple.chart(svg, data);
-  //
-  //   // myChart.setBounds(60, 30, 505, 305);
-  //
-  //   var x = myChart.addCategoryAxis('x', 'index');
-  //   x.hidden = true;
-  //   // x.addOrderRule('usage');
-  //
-  //   var y = myChart.addMeasureAxis('y', 'usage');
-  //   y.hidden = true;
-  //
-  //   var s = myChart.addSeries('cpu', dimple.plot.area);
-  //   myChart.addLegend(60, 10, 500, 20, 'right');
-  //   myChart.draw();
-
-  // });
 }
 
 function main2()
