@@ -69,6 +69,7 @@ function main()
 
   svg = dimple.newSvg('#cpuinfo', 600, 400);
 
+  // gather initial data points
   for (var n = 0; n < nCpus; ++n) {
     last[n] = coreInfo(n);
     var usage = cpuUsagePercentSinceBoot(last[n]);
