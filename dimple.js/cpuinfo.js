@@ -95,7 +95,7 @@ function render(data)
   s.interpolation = 'cardinal';
   // s.lineWeight = 1;
   // s.layout.stack().offset("wiggle"); // = 'wiggle';
-  chart.addLegend(0, 0, 550, 10, 'right');
+  chart.addLegend(0, 0, 550, 10, 'center');
   chart.draw();
 }
 
