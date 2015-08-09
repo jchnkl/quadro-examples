@@ -29,6 +29,8 @@ function render(data)
 
   var y = chart.addMeasureAxis('y', 'usage');
   y.hidden = true;
+  y.overrideMin = 0;
+  y.overrideMax = nCpus * 100;
 
   var s = chart.addSeries('cpu', dimple.plot.area);
   s.interpolation = 'cardinal';
