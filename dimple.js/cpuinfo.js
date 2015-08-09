@@ -34,7 +34,6 @@ function render(data)
 
   var s = chart.addSeries('cpu', dimple.plot.area);
   s.interpolation = 'cardinal';
-  chart.addLegend(0, 0, 550, 10, 'center');
   chart.draw();
 }
 
