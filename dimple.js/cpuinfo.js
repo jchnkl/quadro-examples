@@ -92,15 +92,14 @@ function main(width, height)
     var doShift = data.length == nCpus * maxDataElems;
 
     for (var n = 0; n < nCpus; ++n) {
-
       if (doShift) {
         data.shift();
       }
 
       var now = coreInfo(n);
       var usage = cpuUsagePercent(last[n], coreInfo(n));
-      last[n] = now;
 
+      last[n] = now;
       data.push({ index: index, cpu: 'cpu' + n, usage: usage });
     }
 
