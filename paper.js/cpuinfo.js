@@ -113,4 +113,8 @@ function main()
   }, self.config.interval * 1000)
 }
 
-CpuInfo.main();
+if (window.cpuinfo == null) {
+  window.cpuinfo = CpuInfo;
+} else {
+  window.cpuinfo = CpuInfo;
+}

@@ -121,4 +121,8 @@ function main()
   }, self.config.interval * 1000)
 }
 
-MemInfo.main();
+if (window.meminfo == null) {
+  window.meminfo = MemInfo;
+} else {
+  window.meminfo = MemInfo;
+}

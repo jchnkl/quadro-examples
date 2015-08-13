@@ -175,4 +175,8 @@ function main()
   DBus.system.notify.connect(self, self.update);
 }
 
-BatteryInfo.main()
+if (window.batinfo == null) {
+  window.batinfo = BatteryInfo;
+} else {
+  window.batinfo = BatteryInfo;
+}
