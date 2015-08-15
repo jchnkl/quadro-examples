@@ -8,8 +8,8 @@ var BatteryInfo =
 var padConfig   = window.common.padConfig;
 var multiCircle = window.common.multiCircle;
 var colorMix    = window.common.colorMix;
-var State       = window.sysinfo.battery.State;
-var getState    = window.sysinfo.battery.getState;
+var State       = window.sysfs.battery.State;
+var getState    = window.sysfs.battery.getState;
 
 function updateState(path)
 {
