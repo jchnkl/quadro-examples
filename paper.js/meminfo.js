@@ -1,4 +1,4 @@
-var getMemInfo = window.sysinfo.meminfo.getMemInfo;
+var getMemInfo = window.procfs.meminfo.getMemInfo;
 
 var MemInfo =
   { main: main
@@ -8,7 +8,7 @@ var MemInfo =
 var padConfig   = window.common.padConfig;
 var multiCircle = window.common.multiCircle;
 var colorMix    = window.common.colorMix;
-var getMemInfo  = window.sysinfo.meminfo.getMemInfo;
+var getMemInfo  = window.procfs.meminfo.getMemInfo;
 
 function renderUsage(infos)
 {

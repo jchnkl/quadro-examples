@@ -7,10 +7,10 @@ var CpuInfo =
 var padConfig                = window.common.padConfig;
 var multiCircle              = window.common.multiCircle;
 var colorMix                 = window.common.colorMix;
-var getNumCpus               = window.sysinfo.cpuinfo.getNumCpus;
-var coreInfo                 = window.sysinfo.cpuinfo.coreInfo;
-var cpuUsagePercent          = window.sysinfo.cpuinfo.cpuUsagePercent;
-var cpuUsagePercentSinceBoot = window.sysinfo.cpuinfo.cpuUsagePercentSinceBoot;
+var getNumCpus               = window.procfs.cpuinfo.getNumCpus;
+var coreInfo                 = window.procfs.cpuinfo.coreInfo;
+var cpuUsagePercent          = window.procfs.cpuinfo.cpuUsagePercent;
+var cpuUsagePercentSinceBoot = window.procfs.cpuinfo.cpuUsagePercentSinceBoot;
 
 function renderUsage(infos)
 {

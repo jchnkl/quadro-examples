@@ -1,7 +1,7 @@
-var getNumCpus               = window.sysinfo.cpuinfo.getNumCpus;
-    coreInfo                 = window.sysinfo.cpuinfo.coreInfo;
-    cpuUsagePercent          = window.sysinfo.cpuinfo.cpuUsagePercent;
-    cpuUsagePercentSinceBoot = window.sysinfo.cpuinfo.cpuUsagePercentSinceBoot;
+var getNumCpus               = window.procfs.cpuinfo.getNumCpus;
+    coreInfo                 = window.procfs.cpuinfo.coreInfo;
+    cpuUsagePercent          = window.procfs.cpuinfo.cpuUsagePercent;
+    cpuUsagePercentSinceBoot = window.procfs.cpuinfo.cpuUsagePercentSinceBoot;
 
 var nCpus = getNumCpus();
     maxPercent = nCpus * 100;
